@@ -425,6 +425,8 @@ async function authAction(){
       msg = 'Este e-mail já está cadastrado. Clique em "Entrar".';
     else if(/password.should.be.at.least/i.test(msg))
       msg = 'Senha muito curta — mínimo 6 caracteres.';
+    else if(/error sending confirmation email|unexpected_failure/i.test(msg))
+      msg = 'Falha ao enviar o e-mail de confirmação. Configure um SMTP externo no painel do Supabase (Authentication → SMTP Settings).';
     setErr(msg);
     btn.disabled=false;
     btn.textContent = _authMode==='login'?'Entrar':'Criar conta';
