@@ -461,26 +461,31 @@ async function bootFromCloud(){
   document.getElementById('h-email').textContent = _currentUser?.email || '';
   document.getElementById('btn-save').style.display = 'flex';
 
-  const { data } = await sb
-    .from('simulacoes')
-    .select('payload')
-    .eq('user_id', _currentUser.id)
-    .order('updated_at', { ascending: false })
-    .limit(1)
-    .single();
+  try {
+    const { data } = await sb
+      .from('simulacoes')
+      .select('payload')
+      .eq('user_id', _currentUser.id)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .single();
 
-  if(data?.payload){
-    try{
-      const parsed = JSON.parse(data.payload);
-      if(parsed.S?.scenarios?.length){ S=parsed.S; _nid=parsed._nid||2; }
-      else loadLocal();
-    } catch(e){ loadLocal(); }
-  } else {
-    loadLocal(); // primeira vez: começa com cenário limpo
-    await saveToCloud(true); // cria o registro inicial no Supabase
+    if(data?.payload){
+      try{
+        const parsed = JSON.parse(data.payload);
+        if(parsed.S?.scenarios?.length){ S=parsed.S; _nid=parsed._nid||2; }
+        else loadLocal();
+      } catch(e){ loadLocal(); }
+    } else {
+      loadLocal();
+      await saveToCloud(true);
+    }
+    setSyncStatus('ok');
+  } catch(e){
+    loadLocal();
+    setSyncStatus('error');
   }
 
-  setSyncStatus('ok');
   boot();
 }
 
