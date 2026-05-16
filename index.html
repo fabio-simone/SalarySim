@@ -1640,22 +1640,41 @@ function updName(id,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s.
 // USD/BRL: AwesomeAPI (brasileira, CORS nativo, sem auth)
 
 async function fetchACN(){
-  const PROXY = 'https://corsproxy.io/?';
+  const YAHOO1 = 'https://query1.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d';
+  const YAHOO2 = 'https://query2.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d';
+  const parseYahoo = async r => {
+    const j = await r.json();
+    return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
+  };
   const apis = [
     {
-      nome: 'yahoo-v8',
-      url: PROXY + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d'),
-      parse: async r => {
-        const j = await r.json();
-        return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
-      }
+      nome: 'corsproxy+yahoo1',
+      url: 'https://corsproxy.io/?' + encodeURIComponent(YAHOO1),
+      parse: parseYahoo
     },
     {
-      nome: 'yahoo-v8-alt',
-      url: PROXY + encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d'),
+      nome: 'allorigins+yahoo1',
+      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(YAHOO1),
+      parse: parseYahoo
+    },
+    {
+      nome: 'corsproxy+yahoo2',
+      url: 'https://corsproxy.io/?' + encodeURIComponent(YAHOO2),
+      parse: parseYahoo
+    },
+    {
+      nome: 'allorigins+yahoo2',
+      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(YAHOO2),
+      parse: parseYahoo
+    },
+    {
+      nome: 'stooq',
+      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://stooq.com/q/l/?s=acn.us&f=sd2t2ohlcv&h&e=csv'),
       parse: async r => {
-        const j = await r.json();
-        return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
+        const txt = await r.text();
+        const lines = txt.trim().split('\n');
+        const v = parseFloat(lines[1]?.split(',')[4]);
+        return isNaN(v) ? null : v;
       }
     },
   ];
