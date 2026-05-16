@@ -134,7 +134,10 @@ input[type=number]{-moz-appearance:textfield}
 /* Form */
 .fh{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .fh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.fh-name{flex:1;background:transparent;border:none;font-size:14px;font-weight:800;color:var(--t);outline:none;font-family:inherit;min-width:0}
+.fh-name{flex:1;background:transparent;border:1px dashed transparent;border-radius:5px;font-size:14px;font-weight:800;color:var(--t);outline:none;font-family:inherit;min-width:0;padding:3px 8px;cursor:text;transition:all .15s}
+.fh-name:hover{border-color:var(--bd2);background:var(--s1)}
+.fh-name:focus{border-color:var(--o);border-style:solid;background:var(--bg)}
+.fh-edit-hint{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-left:2px}
 .fh-type{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .form-body{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
 .fsec{margin-bottom:18px}
@@ -209,6 +212,43 @@ th:first-child{background:var(--s2)!important}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:var(--s1)}
 ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+/* ── BENEFITS MODULE ─────────────────── */
+.ben-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:16px}
+.ben-card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.ben-card-hdr{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--bd);cursor:pointer;user-select:none}
+.ben-card-hdr:hover{background:var(--s3)}
+.ben-icon{font-size:16px;flex-shrink:0}
+.ben-title{flex:1;font-size:12px;font-weight:700;color:var(--t)}
+.ben-toggle{font-size:11px;color:var(--t3)}
+.ben-body{padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.ben-body.hidden{display:none}
+.ben-row{display:flex;align-items:center;gap:8px}
+.ben-lbl{font-size:10px;color:var(--t2);flex:1;min-width:0}
+.ben-val{font-size:11px;font-weight:700;color:var(--o);white-space:nowrap;font-family:monospace}
+.ben-select{flex:1;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:4px 7px;font-size:11px;outline:none;font-family:inherit}
+.ben-select:focus{border-color:var(--o)}
+.ben-input{flex:1;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:4px 7px;font-size:11px;outline:none;font-family:monospace;min-width:0}
+.ben-input:focus{border-color:var(--o)}
+.ben-divider{height:1px;background:var(--bd);margin:4px 0}
+.ben-total{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;background:var(--bg);border-top:1px solid var(--bd)}
+.ben-total-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
+.ben-total-val{font-size:14px;font-weight:800;color:var(--o);font-family:monospace}
+.ben-tip{font-size:9px;color:var(--t3);font-style:italic;line-height:1.4;grid-column:1/-1}
+
+/* Comparison table */
+.cmp-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--bd);margin-bottom:12px}
+.cmp-table{width:100%;border-collapse:collapse;min-width:500px}
+.cmp-table th{padding:8px 12px;font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--bd);background:var(--s2);font-weight:600;text-align:right}
+.cmp-table th:first-child{text-align:left;position:sticky;left:0;background:var(--s2);min-width:160px}
+.cmp-table td{padding:7px 12px;border-bottom:1px solid var(--bd);font-size:11px;text-align:right;font-family:monospace}
+.cmp-table td:first-child{text-align:left;font-family:inherit;position:sticky;left:0;background:var(--s1);font-size:11px;color:var(--t2)}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table tr.cmp-total td{background:var(--s2);font-weight:800;color:var(--o);font-size:12px}
+.cmp-table tr.cmp-total td:first-child{color:var(--t)}
+.cmp-best{color:var(--grn)!important}
+.cmp-icon{font-size:14px;margin-right:5px}
+.ben-section-ttl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 8px}
 
 @media(max-width:760px){
   .sce{grid-template-columns:1fr}
@@ -297,8 +337,8 @@ th:first-child{background:var(--s2)!important}
 // Substitua com suas credenciais do painel Supabase:
 // https://supabase.com/dashboard/project/<seu-projeto>/settings/api
 // ═══════════════════════════════════════════════════════════════
-const SUPABASE_URL  = 'https://oqerbezmehucqwlsltwn.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_MA2Gm0mLccPPH5mSFX2Rvw_303wmPly';
+const SUPABASE_URL  = 'https://SEU_PROJETO.supabase.co';
+const SUPABASE_ANON = 'SUA_CHAVE_ANON_PUBLICA';
 // ═══════════════════════════════════════════════════════════════
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -368,8 +408,9 @@ async function authAction(){
 
 function continueLocal(){
   _currentUser = null;
+  clearLocal(); // garante que nada fica salvo
   hideLock();
-  loadLocal();
+  loadLocal();  // começa com cenário limpo
   boot();
 }
 
@@ -393,8 +434,7 @@ async function bootFromCloud(){
   document.getElementById('h-email').textContent = _currentUser?.email || '';
   document.getElementById('btn-save').style.display = 'flex';
 
-  // Try loading from cloud first
-  const { data, error } = await sb
+  const { data } = await sb
     .from('simulacoes')
     .select('payload')
     .eq('user_id', _currentUser.id)
@@ -409,7 +449,7 @@ async function bootFromCloud(){
       else loadLocal();
     } catch(e){ loadLocal(); }
   } else {
-    loadLocal();
+    loadLocal(); // primeira vez: começa limpo
   }
 
   setSyncStatus('ok');
@@ -444,7 +484,6 @@ async function saveToCloud(silent=false){
       btn.textContent='✓ Salvo';
       setTimeout(()=>{ btn.classList.remove('saved'); btn.textContent='💾 Salvar'; },2000);
     }
-    saveLocal();
   }
 }
 
@@ -460,20 +499,32 @@ function scheduleAutoSave(){
   _saveTimer = setTimeout(()=>saveToCloud(true), 3000);
 }
 
-// ── LOCAL PERSISTENCE (fallback) ─────────────────────────────
+// ── LOCAL PERSISTENCE — apenas para usuários autenticados ─────
 function saveLocal(){
+  if(!_currentUser) return; // nunca salva localmente sem login
   try{ localStorage.setItem('ss4', JSON.stringify({S,_nid})); }catch(e){}
 }
+function clearLocal(){
+  try{ localStorage.removeItem('ss4'); }catch(e){}
+}
 function loadLocal(){
+  // Sem login: sempre começa limpo, nunca lê localStorage
+  if(!_currentUser){
+    S = { scenarios:[{id:1,name:'Nova Proposta',type:'CLT',active:true,color:'#f97316',...DEFS.CLT}] };
+    return;
+  }
   try{
     const d = JSON.parse(localStorage.getItem('ss4'));
     if(d?.S?.scenarios?.length){ S=d.S; _nid=d._nid||2; return; }
   }catch(e){}
-  S = { scenarios:[{id:1,name:'Accenture (Atual)',type:'CLT',active:true,color:'#f97316',...DEFS.CLT}] };
+  S = { scenarios:[{id:1,name:'Nova Proposta',type:'CLT',active:true,color:'#f97316',...DEFS.CLT}] };
 }
 function save(){
-  saveLocal();
-  scheduleAutoSave();
+  if(_currentUser){
+    saveLocal();
+    scheduleAutoSave();
+  }
+  // sem login: dados ficam só em memória, somem ao fechar a aba
 }
 
 // ── CHECK SESSION ON LOAD ─────────────────────────────────────
@@ -482,6 +533,8 @@ function save(){
   if(session){
     _currentUser = session.user;
     await bootFromCloud();
+  } else {
+    clearLocal(); // sem sessão: limpa qualquer dado residual
   }
   // lock stays visible if no session (user must login or continue local)
 })();
@@ -491,17 +544,87 @@ function save(){
 // ═══════════════════════════════════════════════════════════════
 const TYPES={
   CLT:     {label:'CLT',             short:'CLT',     color:'#f97316'},
-  PJ:      {label:'Pessoa Jurídica', short:'PJ',      color:'#fb923c'},
-  NON_EQ:  {label:'Sócio Non-Equity',short:'Non-Eq.', color:'#fbbf24'},
-  EQUITY:  {label:'Sócio Equity',    short:'Equity',  color:'#a3e635'},
+  PJ:      {label:'Pessoa Jurídica', short:'PJ',      color:'#fbbf24'},
+  NON_EQ:  {label:'Sócio Non-Equity',short:'Non-Eq.', color:'#a3e635'},
+  EQUITY:  {label:'Sócio Equity',    short:'Equity',  color:'#34d399'},
   BIG_TECH:{label:'Big Tech',        short:'BigTech', color:'#60a5fa'},
   FUNDO:   {label:'Fundo PE/VC',     short:'Fundo',   color:'#c084fc'},
 };
-const PAL=['#f97316','#fb923c','#fbbf24','#a3e635','#60a5fa','#c084fc','#f472b6','#34d399'];
+// Paleta alinhada com TYPES — cada tipo tem sua cor base
+const PAL=['#f97316','#fbbf24','#a3e635','#34d399','#60a5fa','#c084fc','#f472b6','#fb923c'];
+// Ao criar novo cenário usa a cor do seu tipo como padrão
+function colorForType(type){ return TYPES[type]?.color||PAL[0]; }
+
+// ── COLOR VARIATIONS ─────────────────────────────────────────
+// Converte hex para HSL e ajusta lightness/saturation para criar variações
+function hexToHsl(hex){
+  const r=parseInt(hex.slice(1,3),16)/255;
+  const g=parseInt(hex.slice(3,5),16)/255;
+  const b=parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}
+  else{
+    const d=max-min;
+    s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h*=60;
+  }
+  return[h,s*100,l*100];
+}
+function hslToHex(h,s,l){
+  s/=100; l/=100;
+  const c=(1-Math.abs(2*l-1))*s;
+  const x=c*(1-Math.abs((h/60)%2-1));
+  const m=l-c/2;
+  let r,g,b;
+  if(h<60){r=c;g=x;b=0;}
+  else if(h<120){r=x;g=c;b=0;}
+  else if(h<180){r=0;g=c;b=x;}
+  else if(h<240){r=0;g=x;b=c;}
+  else if(h<300){r=x;g=0;b=c;}
+  else{r=c;g=0;b=x;}
+  const toHex=v=>{const h=Math.round((v+m)*255).toString(16);return h.length===1?'0'+h:h;};
+  return'#'+toHex(r)+toHex(g)+toHex(b);
+}
+
+// Gera variação da cor base para o índice N do mesmo tipo
+// idx=0 → cor base
+// idx>0 → variações alternando entre mais claro e mais escuro
+function colorVariation(baseHex, idx){
+  if(idx===0) return baseHex;
+  const[h,s,l]=hexToHsl(baseHex);
+  // sequência de offsets: -15, +15, -30, +30, -45, +45 (lightness)
+  // e variação leve de matiz para diferenciar mais
+  const lightOffsets = [-18, +14, -28, +24, -38, +34];
+  const hueOffsets   = [+8,  -8,  +14, -14, +20, -20];
+  const i = (idx-1) % lightOffsets.length;
+  const newL = Math.max(20, Math.min(80, l + lightOffsets[i]));
+  const newH = (h + hueOffsets[i] + 360) % 360;
+  const newS = Math.max(45, Math.min(90, s));
+  return hslToHex(newH, newS, newL);
+}
+
+// Reatribui cores a todos os cenários, considerando agrupamento por tipo
+function reassignColors(){
+  const counters={};
+  S.scenarios.forEach(s=>{
+    counters[s.type]=(counters[s.type]||0);
+    s.color=colorVariation(colorForType(s.type), counters[s.type]);
+    counters[s.type]++;
+  });
+}
 const DEFS={
   CLT:    {salario:0,crescSal:5,ppr:0,bonus:0,
-           eqMoeda:'USD',eqVal:0,eqCambio:5.80,eqCrescCambio:3,
-           eqVest:4,eqCliff:1,eqBase:10,eqOti:25,eqPes:-10,
+           rsuGrants:[], rsuPrecoAtual:168, rsuCambio:5.80, rsuCrescPreco:8, rsuCrescCambio:3,
+           rsuBase:10, rsuOti:25, rsuPes:-10, rsuRecorrente:true, rsuVestPadrao:3, rsuCliffPadrao:1,
+           esppPct:5,esppAtivo:true,
+           mdAno:0,mdAumento:30,mdPpr:0,mdBonus:0,
+           mdEsppPct:15,mdEsppEmpresaPct:50,
            bSaude:0,bAlim:0,bTrans:0,bPrev:0,bCarro:0,bOut:0},
   PJ:     {fatMensal:0,crescFat:5,proLabore:3000,despAnuais:0,bSaude:0,bOut:0},
   NON_EQ: {proLabore:5000,dist:0,bonus:0,crescSal:8,bSaude:0,bAlim:0,bOut:0},
@@ -568,34 +691,159 @@ function eqRate(base,oti,pes){
 // PROJECTIONS
 // ═══════════════════════════════════════════════════════════════
 function projCLT(s,yr){
-  const g=Math.pow(1+(s.crescSal||5)/100,yr-1);
+  // ── Promoção MD ───────────────────────────────────────────
+  const mdAno = parseInt(s.mdAno)||0;
+  const isMD  = mdAno>0 && yr>=mdAno;
+  // Crescimento salarial composto. No ano da promoção aplica o aumento de MD em cima.
+  let g = Math.pow(1+(s.crescSal||5)/100, yr-1);
+  if(isMD){
+    // Reaplica: crescimento normal até o ano anterior à promoção,
+    // depois aplica o aumento de MD e continua crescendo a partir daí
+    const gPreMD  = Math.pow(1+(s.crescSal||5)/100, mdAno-2); // até ano mdAno-1
+    const mdMult  = 1 + (parseFloat(s.mdAumento)||30)/100;
+    const gPosMD  = Math.pow(1+(s.crescSal||5)/100, yr-mdAno); // crescimento pós-MD
+    g = gPreMD * mdMult * gPosMD;
+  }
+
   const sal=(s.salario||0)*g;
   const i=calcInss(sal),r=Math.max(0,calcIr(sal-i));
   const liqMes=(sal-i-r)*12;
   const liq13=sal-calcInss(sal)-Math.max(0,calcIr(sal-calcInss(sal)));
   const ferBruto=sal*(4/3);
   const liqFer=ferBruto-Math.max(0,calcIr(ferBruto-calcInss(sal)));
-  const pprBruto=(s.ppr||0)*g;
-  const liqPpr=pprBruto-calcPlr(pprBruto);
-  const bonBruto=(s.bonus||0)*g;
-  const liqBon=bonBruto-Math.max(0,calcIr(bonBruto/12))*12;
-  let eqBruto=0,liqEq=0;
-  if((s.eqVal||0)>0){
-    const cliff=s.eqCliff||1,vest=s.eqVest||4;
-    if(yr>=cliff&&yr<=(cliff+vest-1)){
-      const rate=eqRate(s.eqBase,s.eqOti,s.eqPes);
-      let valEq=(s.eqVal||0)*Math.pow(1+rate,yr-cliff);
-      if(s.eqMoeda==='USD'){
-        const cam=(s.eqCambio||5.8)*Math.pow(1+(s.eqCrescCambio||3)/100,yr-1);
-        valEq*=cam;
-      }
-      eqBruto=valEq;
-      liqEq=eqBruto-Math.max(0,calcIr(eqBruto/12))*12;
+
+  // PPR e Bônus — valores pós-MD se promovido
+  const pprBase  = isMD&&(s.mdPpr||0)>0 ? s.mdPpr  : (s.ppr||0);
+  const bonBase  = isMD&&(s.mdBonus||0)>0 ? s.mdBonus : (s.bonus||0);
+  const pprBruto = pprBase*g;
+  const liqPpr   = pprBruto-calcPlr(pprBruto);
+  const bonBruto = bonBase*g;
+  const liqBon   = bonBruto-Math.max(0,calcIr(bonBruto/12))*12;
+
+  // ── RSU / Equity grants (lista de grants históricos por quantidade de ações) ──
+  // Cada grant: { data:'YYYY-MM', qtd:N, precoOutorga:X, vest:Y, cliff:Z }
+  // Valor real = qtd × preço atual × câmbio projetado
+  let eqBruto=0, liqEq=0;
+  const grants = Array.isArray(s.rsuGrants) ? s.rsuGrants : [];
+  const precoAtual = parseFloat(s.rsuPrecoAtual)||0;
+  const cambioBase = parseFloat(s.rsuCambio)||5.8;
+  const crescPreco = parseFloat(s.rsuCrescPreco)||8;
+  const crescCambio= parseFloat(s.rsuCrescCambio)||3;
+  const rateCenario= eqRate(s.rsuBase, s.rsuOti, s.rsuPes);
+
+  // Para cada grant, descobrir quantas ações vestam no ano `yr` do horizonte
+  // Ano 0 = hoje (início da projeção). Grants com data passada = histórico.
+  // Estado atual: simulador trabalha em "anos do horizonte" (1..hor), onde ano 1 = ano corrente.
+  const hojeYr = new Date().getFullYear();
+  grants.forEach(grant=>{
+    if(!grant || !grant.qtd) return;
+    const qtd   = parseFloat(grant.qtd)||0;
+    const vest  = parseInt(grant.vest)||s.rsuVestPadrao||3;
+    const cliff = parseInt(grant.cliff)||s.rsuCliffPadrao||1;
+    // Data do grant (ano)
+    const grantYr = grant.data ? parseInt(String(grant.data).slice(0,4)) : hojeYr;
+    // Anos desde o grant até o ano do horizonte que estamos calculando
+    const yrAbsoluto = hojeYr + yr - 1;
+    const anosDesdeGrant = yrAbsoluto - grantYr;
+    // Vesting linear: começa após cliff, depois N parcelas iguais até completar vest
+    if(anosDesdeGrant < cliff) return;            // antes do cliff: nada
+    if(anosDesdeGrant > vest)  return;            // após vest completo: nada
+    // No ano do cliff vesta: cliff/vest do total (ex: 1/3)
+    // Nos anos seguintes vesta: 1/vest do total
+    let qtdVest;
+    if(anosDesdeGrant === cliff) qtdVest = qtd * (cliff/vest);
+    else qtdVest = qtd * (1/vest);
+    // Preço da ação no ano de vesting (preço atual + crescimento até esse ano)
+    const anosAteVest = anosDesdeGrant - 0; // anos desde hoje
+    const precoNoVest = precoAtual * Math.pow(1+(crescPreco/100), Math.max(0, yrAbsoluto-hojeYr));
+    const cambioNoVest = cambioBase * Math.pow(1+(crescCambio/100), Math.max(0, yrAbsoluto-hojeYr));
+    // Ajuste pelo cenário Pessimista/Otimista
+    const ajuste = 1 + (rateCenario - crescPreco/100) * Math.max(0, yrAbsoluto-hojeYr);
+    const valorBRL = qtdVest * precoNoVest * cambioNoVest * Math.max(0.1, ajuste);
+    eqBruto += valorBRL;
+  });
+
+  // Grants recorrentes futuros: a empresa concede um novo grant a cada ciclo de vesting
+  // Estimamos com base no último grant histórico (média de qtd)
+  if(s.rsuRecorrente !== false && grants.length > 0){
+    const ultGrant = grants[grants.length-1];
+    const qtdUlt = parseFloat(ultGrant.qtd)||0;
+    const vestUlt = parseInt(ultGrant.vest)||s.rsuVestPadrao||3;
+    const cliffUlt = parseInt(ultGrant.cliff)||s.rsuCliffPadrao||1;
+    const ultGrantYr = ultGrant.data ? parseInt(String(ultGrant.data).slice(0,4)) : hojeYr;
+
+    // Próximos grants futuros após o último histórico
+    for(let g=1; g<10; g++){
+      const futGrantYr = ultGrantYr + g*vestUlt;
+      const yrAbs = hojeYr + yr - 1;
+      const anosDesdeGrant = yrAbs - futGrantYr;
+      if(anosDesdeGrant < cliffUlt) continue;
+      if(anosDesdeGrant > vestUlt) continue;
+      if(futGrantYr > yrAbs) break;
+      let qtdVest;
+      if(anosDesdeGrant === cliffUlt) qtdVest = qtdUlt * (cliffUlt/vestUlt);
+      else qtdVest = qtdUlt * (1/vestUlt);
+      const precoNoVest = precoAtual * Math.pow(1+(crescPreco/100), Math.max(0, yrAbs-hojeYr));
+      const cambioNoVest = cambioBase * Math.pow(1+(crescCambio/100), Math.max(0, yrAbs-hojeYr));
+      const ajuste = 1 + (rateCenario - crescPreco/100) * Math.max(0, yrAbs-hojeYr);
+      eqBruto += qtdVest * precoNoVest * cambioNoVest * Math.max(0.1, ajuste);
     }
   }
-  const bens=((s.bSaude||0)+(s.bAlim||0)+(s.bTrans||0)+(s.bPrev||0)+(s.bOut||0))*12+(s.bCarro||0);
-  const bruto=sal*12+sal+ferBruto+pprBruto+bonBruto+eqBruto;
-  const liq=liqMes+liq13+liqFer+liqPpr+liqBon+liqEq;
+
+  liqEq = eqBruto > 0 ? eqBruto - Math.max(0, calcIr(eqBruto/12))*12 : 0;
+
+  // ── ESPP (pré-MD) + VAPE (pós-MD) ────────────────────────
+  // ESPP pré-MD: compra com 15% de desconto → ganho imediato ~17,6%, GC 15%
+  // VAPE pós-MD: compra ao preço de mercado, sem desconto
+  //   → seu ganho = valorização das ações (cenário eq)
+  //   → ganho real = contribuição da empresa (liberada após 1 ano), tributada como GC
+  let esppBruto=0, liqEspp=0;
+  const ESPP_DESCONTO=0.15, ESPP_GANHO=ESPP_DESCONTO/(1-ESPP_DESCONTO); // ~17.647%
+
+  if(!isMD && s.esppAtivo!==false && (s.esppPct||0)>0){
+    // ESPP pré-MD: desconto de 15%, 2x/ano, GC 15% sobre o ganho
+    const investAnual = sal*12*(parseFloat(s.esppPct)||5)/100;
+    const ganhoAnual  = investAnual*ESPP_GANHO;
+    esppBruto = ganhoAnual;
+    liqEspp   = ganhoAnual - calcGc(ganhoAnual);
+
+  } else if(isMD && (s.mdEsppPct||0)>0){
+    // VAPE pós-MD: sem desconto, compra ao preço de mercado
+    // Sua parte: sem ganho imediato — valorização modelada pelo cenário eq
+    // Ganho real: contribuição da empresa (% do que você investe), vest 1 ano
+    const pctSua = parseFloat(s.mdEsppPct)||15;         // % do salário que você investe
+    const empMatch= parseFloat(s.mdEsppEmpresaPct)||50; // % do seu investimento que a empresa banca
+
+    // Valorização das ações na sua parte (cenário eq, sobre estoque acumulado)
+    // Simplificação: aplica taxa de crescimento do equity ao saldo investido no ano
+    const rate     = eqRate(s.eqBase,s.eqOti,s.eqPes);
+    const investSua= sal*12*pctSua/100;
+    const valorizSua = investSua*rate; // ganho de capital da sua parte
+    esppBruto     += valorizSua;
+    liqEspp       += valorizSua>0 ? valorizSua - calcGc(valorizSua) : 0;
+
+    // Contribuição da empresa: recebida no ano seguinte (vest 1 ano)
+    // No ano yr recebemos a contribuição do ano yr-1
+    if(yr > mdAno){
+      const salAnt = (()=>{
+        if(yr-1 >= mdAno){
+          const gPre = Math.pow(1+(s.crescSal||5)/100, mdAno-2);
+          const gPos = Math.pow(1+(s.crescSal||5)/100, (yr-1)-mdAno);
+          return (s.salario||0)*gPre*(1+(parseFloat(s.mdAumento)||30)/100)*gPos;
+        }
+        return (s.salario||0)*Math.pow(1+(s.crescSal||5)/100, yr-2);
+      })();
+      const contribuicaoEmp = salAnt*12*(pctSua/100)*(empMatch/100);
+      // Tributação: contribuição da empresa = rendimento do trabalho (IR progressivo)
+      const irEmp = Math.max(0, calcIr(contribuicaoEmp/12))*12;
+      esppBruto  += contribuicaoEmp;
+      liqEspp    += contribuicaoEmp - irEmp;
+    }
+  }
+
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bAlim'))+(getBenEfetivo(s,'bTrans'))+(getBenEfetivo(s,'bPrev'))+(getBenEfetivo(s,'bOut')))*12+(getBenEfetivo(s,'bCarro'));
+  const bruto=sal*12+sal+ferBruto+pprBruto+bonBruto+eqBruto+esppBruto;
+  const liq=liqMes+liq13+liqFer+liqPpr+liqBon+liqEq+liqEspp;
   const ctc=(sal+encargo(sal))*12+sal+bens;
   return{bruto,liq,trib:Math.max(0,bruto-liq),bens,ctc};
 }
@@ -608,7 +856,7 @@ function projPJ(s,yr){
   const i=calcInss(pl),r=Math.max(0,calcIr(pl-i));
   const liqPL=(pl-i-r)*12;
   const lucro=Math.max(0,fat12-trib-pl*12-(s.despAnuais||0)*g);
-  const bens=((s.bSaude||0)+(s.bOut||0))*12;
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bOut')))*12;
   const liq=liqPL+lucro;
   return{bruto:fat12,liq,trib:Math.max(0,fat12-liq),bens,ctc:fat12};
 }
@@ -621,7 +869,7 @@ function projNonEq(s,yr){
   const dist=(s.dist||0)*g*12;
   const bonBruto=(s.bonus||0)*g;
   const liqBon=bonBruto-calcPlr(bonBruto);
-  const bens=((s.bSaude||0)+(s.bAlim||0)+(s.bOut||0))*12;
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bAlim'))+(getBenEfetivo(s,'bOut')))*12;
   const liq=liqPL+dist+liqBon;
   return{bruto:pl*12+dist+bonBruto,liq,trib:Math.max(0,(i+r)*12+calcPlr(bonBruto)),bens,
     ctc:pl*12+dist+bonBruto+encargo(pl)*12+bens};
@@ -640,7 +888,7 @@ function projEquity(s,yr){
     const gross=(s.buyIn||0)*(s.multBuyOut||1.5);
     buyOut=gross-calcGc(gross-(s.buyIn||0));
   }
-  const bens=((s.bSaude||0)+(s.bOut||0))*12;
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bOut')))*12;
   const liq=liqPL+dist+part-amort+(yr===C.hor?buyOut:0);
   return{bruto:pl*12+dist+part,liq,trib:(i+r)*12,bens,ctc:pl*12+dist+part+encargo(pl)*12+bens};
 }
@@ -665,7 +913,7 @@ function projBigTech(s,yr){
       liqRsu=rsuBruto-Math.max(0,calcIr(rsuBruto/12))*12;
     }
   }
-  const bens=((s.bSaude||0)+(s.bAlim||0)+(s.bOut||0))*12;
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bAlim'))+(getBenEfetivo(s,'bOut')))*12;
   const bruto=sal*12+sal+ferBruto+bonBruto+rsuBruto;
   const liq=liqMes+liq13+liqFer+liqBon+liqRsu;
   return{bruto,liq,trib:Math.max(0,bruto-liq),bens,ctc:(sal+encargo(sal))*12+sal+bens};
@@ -683,7 +931,7 @@ function projFundo(s,yr){
     ciBruto=s.carriedVal;
     liqCi=ciBruto-calcGc(ciBruto);
   }
-  const bens=((s.bSaude||0)+(s.bOut||0))*12;
+  const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bOut')))*12;
   const bruto=sal*12+bonBruto+ciBruto;
   const liq=liqMes+liqBon+liqCi;
   return{bruto,liq,trib:Math.max(0,bruto-liq),bens,ctc:(sal+encargo(sal))*12+sal+bens};
@@ -736,14 +984,94 @@ const fK=v=>{
 // ═══════════════════════════════════════════════════════════════
 // FORM BUILDERS
 // ═══════════════════════════════════════════════════════════════
+// ── FORMATAÇÃO DE CAMPOS NUMÉRICOS ───────────────────────────
+// Aceita: "30000" → "30.000", "30000,5" → "30.000,5", "1,80" → "1,80"
+// Brasileiro: ponto = milhar, vírgula = decimal
+function maskNum(input){
+  const pos=input.selectionStart;
+  let v=input.value;
+  // Remove tudo que não é dígito ou vírgula
+  let clean=v.replace(/[^\d,]/g,'');
+  // Permite só uma vírgula (a primeira)
+  const partes=clean.split(',');
+  let intPart=partes[0]||'';
+  let decPart=partes.length>1 ? partes.slice(1).join('').slice(0,2) : null; // até 2 casas decimais
+  // Formata parte inteira com separador de milhar
+  intPart = intPart ? parseInt(intPart,10).toLocaleString('pt-BR') : '';
+  let masked = intPart;
+  if(decPart!==null) masked += ',' + decPart;
+  const diff=masked.length-v.length;
+  input.value=masked;
+  try{input.setSelectionRange(pos+diff,pos+diff);}catch(e){}
+  // Retorna valor numérico: "30.000,5" → 30000.5
+  return parseFloat(masked.replace(/\./g,'').replace(',','.'))||0;
+}
+// Converte texto formatado para número
+function parseNum(v){ return parseFloat(String(v).replace(/\./g,'').replace(',','.').replace(/[^\d.-]/g,''))||0; }
+// Formata valor inicial para exibição. Se tem casas decimais (não inteiro), mostra com vírgula
+function fmtField(v){
+  if(v==null||v===0)return'';
+  const n=Number(v);
+  if(Number.isInteger(n)) return n.toLocaleString('pt-BR');
+  // Decimais: formata com até 2 casas, padrão brasileiro
+  return n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
 function ni(id,field,pre,suf,step,min,val){
-  const v=(val==null||val===0)?'':val;
-  const ma=min!=null?`min="${min}"`:'';
+  // step e min são mantidos como data attrs para referência futura
+  const display=fmtField(val);
+  const isDecimal=step&&step<1; // ex: 0.5 para % ou câmbio — mantém type=number
+  if(isDecimal){
+    return`<div class="iw">
+      ${pre?`<span class="ip l">${pre}</span>`:''}
+      <input type="number" class="ni" value="${val==null||val===0?'':val}" step="${step}" ${min!=null?`min="${min}"`:''}
+        oninput="upd(${id},'${field}',this.value)">
+      ${suf?`<span class="ip r">${suf}</span>`:''}</div>`;
+  }
   return`<div class="iw">
     ${pre?`<span class="ip l">${pre}</span>`:''}
-    <input type="number" class="ni" value="${v}" step="${step||1000}" ${ma}
-      oninput="upd(${id},'${field}',this.value)">
+    <input type="text" inputmode="numeric" class="ni" value="${display}" data-id="${id}" data-field="${field}"
+      oninput="const v=maskNum(this);updSilent(${id},'${field}',v)"
+      onblur="updPreview()">
     ${suf?`<span class="ip r">${suf}</span>`:''}</div>`;
+}
+
+// upd sem re-render (preserva foco)
+let _saveTimer2=null;
+function updSilent(id,field,val){
+  const s=S.scenarios.find(x=>x.id===id);if(!s)return;
+  s[field]=val;
+  clearTimeout(_saveTimer2);
+  _saveTimer2=setTimeout(()=>{save();updPreview();},300);
+}
+// Atualiza só a prévia e os cards de resumo sem re-renderizar o formulário
+function updPreview(){
+  const projs=computeAll();
+  const ed=S.scenarios.find(s=>s.id===C.eid)||S.scenarios[0];
+  if(!ed)return;
+  const pvP=ed.active?projs.find(p=>p.s.id===ed.id):null;
+  const pv=pvP?pvP.yrs[0]:null;
+  // Atualiza prévia
+  const pvEl=document.querySelector('.pv-grid');
+  if(pvEl&&pv){
+    const vals=[pv.liq,pv.bruto,pv.trib,pv.ctc];
+    const colors=['#f97316','#fb923c','#ef4444','#c084fc'];
+    pvEl.querySelectorAll('.pv-val').forEach((el,i)=>{el.textContent=fK(vals[i]);el.style.color=colors[i];});
+  }
+  // Atualiza sum-cards no dashboard se estiver visível
+  document.querySelectorAll('.sum-card').forEach(card=>{
+    const lbl=card.querySelector('.sc-lbl')?.textContent;
+    const proj=projs.find(p=>p.s.name===lbl);
+    if(proj){
+      const v=getV(proj.yrs[0]);
+      card.querySelector('.sc-val').textContent=fK(v);
+    }
+  });
+}
+
+function upd(id,field,val){
+  const s=S.scenarios.find(x=>x.id===id);if(!s)return;
+  s[field]=parseFloat(val)||0;save();updPreview();
 }
 function togBtn(id,field,v1,l1,v2,l2,cur){
   return`<div class="tog-row">
@@ -774,25 +1102,115 @@ function ibox(color,html){
   return`<div class="ib" style="background:${color}12;border-color:${color}28;color:${color}cc">${html}</div>`;
 }
 
+// Mapeia campos bX do cenário para os valores estimados da aba Benefícios
+function getBenValFor(sid, key){
+  const b = getBen(sid);
+  switch(key){
+    case 'bSaude': return b.plano?.on ? estimaPlano(b.plano) : null;
+    case 'bAlim':  return b.vr?.on    ? estimaVR(b.vr)       : null;
+    case 'bTrans': return b.homeoffice?.on ? estimaHomeoffice(b.homeoffice) : null;
+    case 'bPrev':  return b.prev?.on  ? estimaPrev(b.prev)   : null;
+    case 'bCarro': return b.carro?.on ? estimaCarro(b.carro)*12 : null; // carro é anual no bens
+    case 'bOut':   { const bo=getBen(sid).outros; return (bo&&((bo.chips||[]).length>0||bo.valorExtra>0)) ? estimaOutros(bo) : null; }
+  }
+  return null;
+}
+
+// Retorna o valor efetivo de um campo de benefício (aba Benefícios > campo manual)
+function getBenEfetivo(s, key){
+  const fromBen = getBenValFor(s.id, key);
+  return fromBen !== null ? fromBen : (s[key]||0);
+}
+
+// Sync: copia valores estimados da aba Benefícios para os campos bX do cenário
+function syncBenToScenario(sid){
+  const s = S.scenarios.find(x=>x.id===sid); if(!s)return;
+  ['bSaude','bAlim','bTrans','bPrev','bCarro','bOut'].forEach(key=>{
+    const v = getBenValFor(sid, key);
+    if(v !== null) s[key] = v;
+  });
+}
+
 function benefSec(s){
-  const id=s.id,t=s.type;
+  const id=s.id, t=s.type;
   const hasAlim=(t==='CLT'||t==='BIG_TECH'||t==='NON_EQ');
-  const hasTrans=(t==='CLT'),hasPrev=(t==='CLT'),hasCarro=(t==='CLT');
+  const hasTrans=(t==='CLT'), hasPrev=(t==='CLT'), hasCarro=(t==='CLT');
+
+  function benField(key, lbl, unit, ctx, hasIt=true){
+    if(!hasIt) return '';
+    const fromBen = getBenValFor(id, key);
+    const manual  = s[key]||0;
+    const isLinked = fromBen !== null;
+    const displayVal = isLinked ? fromBen : manual;
+    const isAnual = key==='bCarro';
+    const unitLbl = isAnual ? 'R$/ano' : 'R$/mês';
+
+    if(isLinked){
+      // Somente leitura — valor vem da aba Benefícios
+      return`<div class="fld">
+        <div class="fld-top">
+          <span class="fld-lbl">${lbl}</span>
+          <span class="fld-hint" style="color:var(--grn)">✓ via aba Benefícios</span>
+        </div>
+        <div class="fld-ctx" style="color:var(--t3)">${ctx}</div>
+        <div class="iw" style="opacity:.7;cursor:default">
+          <span class="ip l">R$</span>
+          <span class="ni" style="display:flex;align-items:center;padding:5px 8px;color:var(--grn);font-family:monospace;font-size:12px">
+            ${fmtField(Math.round(displayVal))}
+            <span style="font-size:9px;color:var(--t3);margin-left:4px">${unitLbl}</span>
+          </span>
+        </div>
+      </div>`;
+    }
+
+    // Editável — sem vínculo com aba Benefícios
+    return fld(lbl, unitLbl, ctx, ni(id, key, 'R$', '', isAnual?1000:100, 0, manual));
+  }
+
+  const hasBenLinked = ['bSaude','bAlim','bTrans','bPrev','bCarro','bOut'].some(k=>getBenValFor(id,k)!==null);
+
   return sec('Benefícios fornecidos pela empresa','#f97316',`
-    ${fld('Plano de Saúde','R$/mês','Custo do plano pago pela empresa. Não desconta do seu salário.',ni(id,'bSaude','R$','',100,0,s.bSaude))}
-    ${hasAlim?fld('Alimentação / Refeição','R$/mês','Vale alimentação ou refeição — não tributado até o limite legal.',ni(id,'bAlim','R$','',100,0,s.bAlim)):''}
-    ${hasTrans?fld('Transporte','R$/mês','VT ou auxílio-deslocamento.',ni(id,'bTrans','R$','',100,0,s.bTrans)):''}
-    ${hasPrev?fld('Previdência Privada','R$/mês','Contribuição da empresa ao PGBL/VGBL.',ni(id,'bPrev','R$','',100,0,s.bPrev)):''}
-    ${hasCarro?fld('Carro (custo anual total)','R$/ano','IPVA + seguro + combustível + manutenção. Ou valor de leasing anual.',ni(id,'bCarro','R$','',1000,0,s.bCarro)):''}
-    ${fld('Outros Benefícios','R$/mês','Gympass, plano dental, home office, stock discount etc.',ni(id,'bOut','R$','',100,0,s.bOut))}
+    ${hasBenLinked?`<div class="fc2"><div class="fld-ctx" style="color:var(--grn);margin-bottom:4px">
+      ✓ Alguns campos estão vinculados à aba Benefícios — edite lá para mudar os valores.
+    </div></div>`:''}
+    ${benField('bSaude','Plano de Saúde','R$/mês','Custo do plano pago pela empresa.')}
+    ${benField('bAlim','Alimentação / Refeição','R$/mês','Vale alimentação ou refeição.', hasAlim)}
+    ${benField('bTrans','Transporte','R$/mês','VT ou auxílio-deslocamento.', hasTrans)}
+    ${benField('bPrev','Previdência Privada','R$/mês','Contribuição da empresa ao PGBL/VGBL.', hasPrev)}
+    ${benField('bCarro','Carro (custo anual total)','R$/ano','Valor total anual do benefício de carro.', hasCarro)}
+    ${benField('bOut','Outros Benefícios','R$/mês','Gympass, plano dental, home office etc.')}
   `);
 }
 
 function formCLT(s){
-  const id=s.id,eqLabel=s.eqMoeda==='USD'?'US$':'R$';
-  const eqCtx=s.eqMoeda==='USD'
-    ?'Grant em dólares. Convertido para BRL pelo câmbio projetado a cada ano do vesting.'
-    :'Grant já em reais. IR incide no vesting de cada parcela como rendimento do trabalho.';
+  const id=s.id;
+  const grants = Array.isArray(s.rsuGrants) ? s.rsuGrants : [];
+  const precoAtual = parseFloat(s.rsuPrecoAtual)||0;
+  const cambio = parseFloat(s.rsuCambio)||5.8;
+
+  // Helpers to summarize the grants
+  const hojeYr = new Date().getFullYear();
+  let unvestedQtd = 0, vestedQtd = 0, totalQtd = 0;
+  grants.forEach(g=>{
+    if(!g||!g.qtd) return;
+    const qtd = parseFloat(g.qtd)||0;
+    const vest = parseInt(g.vest)||s.rsuVestPadrao||3;
+    const cliff = parseInt(g.cliff)||s.rsuCliffPadrao||1;
+    const grantYr = g.data ? parseInt(String(g.data).slice(0,4)) : hojeYr;
+    const anosDesde = hojeYr - grantYr;
+    totalQtd += qtd;
+    if(anosDesde >= vest){ vestedQtd += qtd; }
+    else if(anosDesde < cliff){ unvestedQtd += qtd; }
+    else {
+      // Vestou parcialmente: cliff/vest + (anosDesde-cliff)*(1/vest)
+      const fracVestada = (cliff/vest) + Math.max(0,anosDesde-cliff)*(1/vest);
+      vestedQtd += qtd * fracVestada;
+      unvestedQtd += qtd * (1-fracVestada);
+    }
+  });
+  const valorUnvestedBRL = unvestedQtd * precoAtual * cambio;
+  const valorTotalBRL = totalQtd * precoAtual * cambio;
+
   return(
     sec('Remuneração Fixa','#f97316',`
       ${fld('Salário Mensal Bruto','valor no holerite antes de INSS e IR','Ex: R$30.000. O simulador calcula INSS progressivo + IR progressivo automaticamente.',ni(id,'salario','R$','',500,0,s.salario))}
@@ -800,26 +1218,181 @@ function formCLT(s){
       ${fld('PPR / PLR Anual','valor bruto recebido','Participação nos resultados. Tabela exclusiva de fonte — menor alíquota que o IR normal. Zero até R$6.677/ano.',ni(id,'ppr','R$','',1000,0,s.ppr))}
       ${fld('Bônus Discricional Anual','valor bruto recebido','Bônus fora do PPR. Tributado pelo IR progressivo (tabela mensal sobre valor mensal equivalente).',ni(id,'bonus','R$','',1000,0,s.bonus))}
     `,true)+
-    sec('Equity / RSU','#c084fc',`
-      ${fld('Grant por Ciclo de Vesting',`em ${eqLabel}`,eqCtx,
-        `<div class="iw"><span class="ip l">${eqLabel}</span>
-          <input type="number" class="ni" value="${s.eqVal||''}" step="1000" min="0"
-            oninput="upd(${id},'eqVal',this.value)">
-        </div>`)}
-      ${fld('Moeda do Grant','',null,togBtn(id,'eqMoeda','BRL','BRL','USD','USD',s.eqMoeda))}
-      ${s.eqMoeda==='USD'?`
-        ${fld('Câmbio Atual','R$ por US$ 1','Taxa de câmbio hoje. Projetada ano a ano pela variação abaixo.',ni(id,'eqCambio','R$/US$','',0.1,1,s.eqCambio))}
-        ${fld('Variação Cambial Anual','% a.a.','Quanto o dólar sobe em média por ano. Histórico de longo prazo: 3–6% a.a.',ni(id,'eqCrescCambio','','% a.a.',0.5,-20,s.eqCrescCambio))}
-      `:''}
-      ${fld('Período de Vesting','anos totais','Tempo até 100% das ações serem entregues.',ni(id,'eqVest','','anos',1,1,s.eqVest))}
-      ${fld('Cliff — carência inicial','anos','Período mínimo antes de qualquer entrega de ações. Comum: 1 ano.',ni(id,'eqCliff','','anos',1,0,s.eqCliff))}
-      <div class="fc2"><div class="fld-ctx" style="margin-top:4px">
-        Valorização da ação: use os botões <strong>Pessimista / Base / Otimista</strong> no topo para ver o impacto no resultado.
+
+    sec('RSU / Equity — Grants históricos','#c084fc',`
+      <div class="fc2">${ibox('#c084fc',`
+        Liste cada grant de RSU que você recebeu. Informe a quantidade de ações e o vesting de cada um.
+        O simulador calcula automaticamente o valor em R$ pelo <strong>preço atual da ação ACN (NYSE)</strong> × câmbio.
+        <br><strong>Não use o preço de outorga</strong> — o valor real depende do preço de mercado hoje.`)}</div>
+
+      <div class="fc2" style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <button id="btn-acn-${id}" onclick="atualizarCotacaoACN(${id})"
+          style="background:var(--od);border:1px solid var(--o);border-radius:5px;color:var(--o);font-size:11px;font-weight:600;padding:5px 12px;cursor:pointer;font-family:inherit">
+          🔄 Atualizar cotação ACN + USD/BRL
+        </button>
+        ${s._rsuUltAtualizacao?`<span style="font-size:10px;color:var(--t3)">Última: ${new Date(s._rsuUltAtualizacao).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>`:''}
+      </div>
+      <div id="diag-${id}" style="display:none;background:#0a0a0a;border:1px solid #222;border-radius:5px;padding:8px 10px;margin-bottom:8px;max-height:140px;overflow-y:auto;font-size:10px;font-family:monospace;color:#666"></div>
+
+      ${fld('Preço atual da ação ACN','em US$','Cole o valor atual da ação Accenture na NYSE ou use o botão acima para buscar.',
+        ni(id,'rsuPrecoAtual','US$','',1,0,s.rsuPrecoAtual))}
+      ${fld('Câmbio atual','R$ por US$ 1','Taxa de câmbio para conversão. Projetada ano a ano pela variação abaixo.',
+        ni(id,'rsuCambio','R$/US$','',0.1,1,s.rsuCambio))}
+      ${fld('Crescimento anual da ação','% a.a. (base do cenário)','Quanto a ACN tende a valorizar por ano. Histórico ~8–12%.',
+        ni(id,'rsuCrescPreco','','% a.a.',1,-50,s.rsuCrescPreco))}
+      ${fld('Variação cambial anual','% a.a.','Apreciação do dólar projetada.',
+        ni(id,'rsuCrescCambio','','% a.a.',0.5,-20,s.rsuCrescCambio))}
+
+      <div class="fc2"><div class="fsec-hdr" style="margin-top:10px">
+        <div class="fsec-bar" style="background:#c084fc"></div>
+        <span class="fsec-ttl" style="color:#c084fc">Seus grants (${grants.length})</span>
       </div></div>
-      ${fld('Crescimento Base','% a.a.',null,ni(id,'eqBase','','% a.a.',1,-50,s.eqBase))}
-      ${fld('Crescimento Otimista','% a.a.',null,ni(id,'eqOti','','% a.a.',1,-50,s.eqOti))}
-      ${fld('Crescimento Pessimista','% a.a.',null,ni(id,'eqPes','','% a.a.',1,-100,s.eqPes))}
+      <div class="fc2" id="grants-list-${id}">
+        ${grants.length===0?`<div class="fld-ctx" style="text-align:center;padding:20px;color:var(--t3)">Nenhum grant adicionado ainda. Clique no botão abaixo para adicionar.</div>`:''}
+        ${grants.map((g,gi)=>{
+          const gQtd=parseFloat(g.qtd)||0;
+          const gPreco=parseFloat(g.precoOutorga)||0;
+          const valOutorga=gQtd*gPreco;
+          const valAtual=gQtd*precoAtual*cambio;
+          const grantYr=g.data?parseInt(String(g.data).slice(0,4)):hojeYr;
+          const anos=hojeYr-grantYr;
+          const v=parseInt(g.vest)||s.rsuVestPadrao||3;
+          const cl=parseInt(g.cliff)||s.rsuCliffPadrao||1;
+          let statusLabel='', statusColor='var(--t3)';
+          if(anos>=v){statusLabel='100% vested';statusColor='var(--grn)';}
+          else if(anos<cl){statusLabel='unvested';statusColor='var(--red)';}
+          else{
+            const frac=(cl/v)+Math.max(0,anos-cl)*(1/v);
+            statusLabel=`${Math.round(frac*100)}% vested`;
+            statusColor='#fbbf24';
+          }
+          return`<div style="background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:11px;font-weight:700;color:var(--t)">Grant #${gi+1}</span>
+              <span style="font-size:10px;color:${statusColor};font-weight:700">${statusLabel}</span>
+              <span style="flex:1"></span>
+              <span style="font-size:11px;color:var(--grn);font-family:monospace;font-weight:700">${fK(valAtual)}</span>
+              <button onclick="delGrant(${id},${gi})" style="background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0">✕</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:end">
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Ano outorga</div>
+                <input type="text" inputmode="numeric" value="${grantYr}" onblur="updGrant(${id},${gi},'data',this.value+'-01');render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Qtd ações</div>
+                <input type="text" inputmode="numeric" value="${fmtField(gQtd)}" oninput="const v=maskNum(this);updGrant(${id},${gi},'qtd',v)" onblur="render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Preço outorga</div>
+                <input type="text" inputmode="numeric" value="${fmtField(gPreco)}" oninput="const v=maskNum(this);updGrant(${id},${gi},'precoOutorga',v)" onblur="render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Vesting (anos)</div>
+                <input type="number" value="${v}" min="1" max="10" oninput="updGrant(${id},${gi},'vest',this.value);render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Cliff (anos)</div>
+                <input type="number" value="${cl}" min="0" max="5" oninput="updGrant(${id},${gi},'cliff',this.value);render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="fc2">
+        <button onclick="addGrant(${id})" style="width:100%;padding:8px;background:transparent;border:1px dashed var(--bd2);border-radius:6px;color:var(--t3);font-size:11px;cursor:pointer;font-family:inherit">
+          + Adicionar grant
+        </button>
+      </div>
+
+      ${grants.length>0?`<div class="fc2" style="margin-top:12px">
+        <div style="background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:10px 12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+            <div>
+              <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em">Total ações</div>
+              <div style="font-size:13px;font-weight:800;color:var(--t);font-family:monospace">${Math.round(totalQtd).toLocaleString('pt-BR')}</div>
+              <div style="font-size:10px;color:var(--t3)">${fK(valorTotalBRL)} hoje</div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--grn);text-transform:uppercase;letter-spacing:.05em">Já vestadas</div>
+              <div style="font-size:13px;font-weight:800;color:var(--grn);font-family:monospace">${Math.round(vestedQtd).toLocaleString('pt-BR')}</div>
+              <div style="font-size:10px;color:var(--t3)">${fK(vestedQtd*precoAtual*cambio)}</div>
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.05em">Unvested (perderia ao sair)</div>
+              <div style="font-size:13px;font-weight:800;color:var(--red);font-family:monospace">${Math.round(unvestedQtd).toLocaleString('pt-BR')}</div>
+              <div style="font-size:10px;color:var(--red)">${fK(valorUnvestedBRL)}</div>
+            </div>
+          </div>
+        </div>
+      </div>`:''}
+
+      ${fld('Grants futuros recorrentes','',
+        'Ativo: assume que a empresa concede novos grants no futuro (Accenture concede anualmente). Usa a quantidade do último grant histórico como referência.',
+        `<div class="tog-row">
+          <button class="tog${s.rsuRecorrente!==false?' on':''}" onclick="updStr(${id},'rsuRecorrente',true);render()">Sim — novos grants no futuro</button>
+          <button class="tog${s.rsuRecorrente===false?' on':''}" onclick="updStr(${id},'rsuRecorrente',false);render()">Não — só os grants listados</button>
+        </div>`,true)}
+
+      <div class="fc2"><div class="fld-ctx" style="margin-top:8px">
+        <strong>Valorização da ação:</strong> use Pessimista / Base / Otimista no topo. Os valores abaixo são as taxas anuais para cada cenário.
+      </div></div>
+      ${fld('Crescimento Base','% a.a.',null,ni(id,'rsuBase','','% a.a.',1,-50,s.rsuBase))}
+      ${fld('Crescimento Otimista','% a.a.',null,ni(id,'rsuOti','','% a.a.',1,-50,s.rsuOti))}
+      ${fld('Crescimento Pessimista','% a.a.',null,ni(id,'rsuPes','','% a.a.',1,-100,s.rsuPes))}
     `)+
+
+    sec('ESPP — Employee Stock Purchase Plan','#34d399',`
+      <div class="fc2">${ibox('#34d399',`
+        <strong>ESPP pré-MD</strong>: você investe 1–10% do salário e compra ações Accenture (NYSE: ACN)
+        com <strong>15% de desconto</strong> em maio e novembro. O ganho imediato é ~17,6% sobre o valor investido,
+        tributado como <strong>ganho de capital (15%)</strong>.`)}</div>
+      ${fld('ESPP ativo','',null,
+        `<div class="tog-row">
+          <button class="tog${s.esppAtivo!==false?' on':''}" onclick="updStr(${id},'esppAtivo',true);render()">Sim</button>
+          <button class="tog${s.esppAtivo===false?' on':''}" onclick="updStr(${id},'esppAtivo',false);render()">Não</button>
+        </div>`)}
+      ${s.esppAtivo!==false?fld('% do salário investido no ESPP','1% a 10%',
+        `Você define quanto do salário bruto vai para o ESPP. Ganho anual estimado: ${fK(Math.round((s.salario||0)*12*(s.esppPct||5)/100*0.17647))}/ano (desconto 15%, GC 15%).`,
+        ni(id,'esppPct','','%',1,1,s.esppPct||5)):''}
+    `,true)+
+
+    sec('Promoção a MD (Managing Director)','#f97316',`
+      <div class="fc2">${ibox('#f97316',`
+        A partir do ano de promoção, o salário recebe um aumento pontual e continua crescendo normalmente.
+        PPR e bônus também mudam. O ESPP é substituído pelo <strong>VAPE</strong> (Vehicle for Accenture People Equity):
+        você compra ações ao <strong>preço de mercado</strong> (sem desconto) e a empresa contribui com um % do seu investimento,
+        liberado após <strong>1 ano de vest</strong>. Seu ganho real = contribuição da empresa + valorização das ações.`)}</div>
+      ${fld('Ano da promoção a MD','0 = não modelar',
+        'Exemplo: 3 = você vira MD no início do ano 3 da projeção. Zero desativa a promoção.',
+        ni(id,'mdAno','Ano','',1,0,s.mdAno||0))}
+      ${(s.mdAno||0)>0?`
+      ${fld('Aumento salarial na promoção','% pontual',
+        'Percentual de aumento aplicado no ano da promoção, em cima do salário já corrigido pelo crescimento anual.',
+        ni(id,'mdAumento','','%',5,0,s.mdAumento||30))}
+      ${fld('PPR anual pós-MD','valor bruto',
+        'Nova meta de PPR/PLR como MD. Tributado pela tabela exclusiva de fonte.',
+        ni(id,'mdPpr','R$','',5000,0,s.mdPpr||0))}
+      ${fld('Bônus discricionário pós-MD','valor bruto',
+        'Novo bônus como MD. Tributado pelo IR progressivo sobre valor mensal equivalente.',
+        ni(id,'mdBonus','R$','',5000,0,s.mdBonus||0))}
+      <div class="fc2"><div class="fsec-hdr" style="margin-top:8px">
+        <div class="fsec-bar" style="background:#34d399"></div>
+        <span class="fsec-ttl" style="color:#34d399">VAPE pós-MD</span>
+      </div></div>
+      ${fld('% do salário que você investe no VAPE','ex: 15%',
+        'Você compra ações ACN ao preço de mercado. Sem desconto — o ganho vem da valorização e da contribuição da empresa.',
+        ni(id,'mdEsppPct','','%',5,1,s.mdEsppPct||15))}
+      ${fld('Match da empresa','% do seu investimento',
+        'A empresa deposita este % do valor que você investiu. Liberado após 1 ano (vest). Tributado como rendimento do trabalho no recebimento.',
+        ni(id,'mdEsppEmpresaPct','','%',10,0,s.mdEsppEmpresaPct||50))}
+      <div class="fc2"><div class="fld-ctx" style="margin-top:4px;color:var(--grn)">
+        Contribuição da empresa no Ano ${(s.mdAno||0)+1}: ${fK(Math.round((s.salario||0)*(1+(s.mdAumento||30)/100)*12*(s.mdEsppPct||15)/100*(s.mdEsppEmpresaPct||50)/100))}/ano
+        (recebida 1 ano depois do investimento, tributada como renda do trabalho)
+      </div></div>
+      `:''}
+    `,true)+
+
     benefSec(s)
   );
 }
@@ -889,8 +1462,8 @@ function formBigTech(s){
       ${fld('Salário Mensal Bruto','antes de INSS e IR',
         `Pode ser em BRL (contrato local) ou USD (Big Tech global). ${s.moeda==='USD'?'Convertido para BRL pelo câmbio atual.':''}`,
         `<div class="iw"><span class="ip l">${s.moeda==='USD'?'US$':'R$'}</span>
-          <input type="number" class="ni" value="${s.salario||''}" step="500" min="0"
-            oninput="upd(${id},'salario',this.value)">
+          <input type="text" inputmode="numeric" class="ni" value="${fmtField(s.salario)}"
+            oninput="const v=maskNum(this);updSilent(${id},'salario',v)" onblur="updPreview()">
         </div>`)}
       ${fld('Moeda do Salário','',null,togBtn(id,'moeda','BRL','BRL','USD','USD',s.moeda))}
       ${s.moeda==='USD'?fld('Taxa de Câmbio Atual','R$ / US$ 1','Taxa de hoje para converter salário e RSUs.',ni(id,'cambio','R$/US$','',0.1,1,s.cambio)):''}
@@ -946,19 +1519,152 @@ function buildForm(s){
 // ═══════════════════════════════════════════════════════════════
 // STATE MUTATORS
 // ═══════════════════════════════════════════════════════════════
-function upd(id,field,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s[field]=parseFloat(val)||0;save();render(); }
 function updStr(id,field,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s[field]=val;save();render(); }
 function updName(id,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s.name=val;save(); }
+
+// ── COTAÇÃO ONLINE ───────────────────────────────────────────
+// USD/BRL: AwesomeAPI (brasileira, CORS habilitado nativamente, sem auth)
+// Ações: Stooq via allorigins (CORS proxy gratuito, sem auth)
+
+async function fetchUSDBRL(){
+  try{
+    const res=await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json=await res.json();
+    const v=parseFloat(json?.USDBRL?.bid);
+    if(!v||isNaN(v))throw new Error('Sem cotação');
+    console.log('✓ USD/BRL =',v);
+    return v;
+  }catch(e){
+    console.warn('✗ USD/BRL falhou:',e.message);
+    return null;
+  }
+}
+
+async function fetchACN(){
+  // Brapi: API brasileira, CORS nativo, gratuita, sem auth para cotações básicas
+  const apis=[
+    {
+      nome:'brapi',
+      url:'https://brapi.dev/api/quote/ACN?token=guest',
+      parse:async r=>{
+        const j=await r.json();
+        const price=j?.results?.[0]?.regularMarketPrice;
+        return price||null;
+      }
+    },
+    {
+      nome:'brapi-v2',
+      url:'https://brapi.dev/api/quote/ACN',
+      parse:async r=>{
+        const j=await r.json();
+        return j?.results?.[0]?.regularMarketPrice||null;
+      }
+    },
+  ];
+  for(const api of apis){
+    diagLog(`Tentando ${api.nome}…`);
+    try{
+      const res=await fetch(api.url);
+      if(!res.ok){ diagLog(`✗ ${api.nome}: HTTP ${res.status}`,'red'); continue; }
+      const price=await api.parse(res);
+      if(!price||isNaN(price)){ diagLog(`✗ ${api.nome}: sem preço na resposta`,'red'); continue; }
+      diagLog(`✓ ${api.nome}: ACN = $${price}`,'green');
+      return parseFloat(price);
+    }catch(e){
+      diagLog(`✗ ${api.nome}: ${e.message}`,'red');
+    }
+  }
+  return null;
+}
+
+async function fetchUSDBRL(){
+  diagLog('Buscando USD/BRL via AwesomeAPI…');
+  try{
+    const res=await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json=await res.json();
+    const v=parseFloat(json?.USDBRL?.bid);
+    if(!v||isNaN(v)) throw new Error('Sem cotação');
+    diagLog(`✓ USD/BRL = ${v}`,'green');
+    return v;
+  }catch(e){
+    diagLog(`✗ USD/BRL: ${e.message}`,'red');
+    return null;
+  }
+}
+
+// Painel de diagnóstico visível na tela
+let _diagEl=null;
+function diagLog(msg,cor){
+  if(!_diagEl) return;
+  const colors={green:'#4ade80',red:'#f87171',gray:'#555',default:'#aaa'};
+  const line=document.createElement('div');
+  line.style.cssText=`font-size:10px;font-family:monospace;color:${colors[cor]||colors.default};margin:1px 0`;
+  line.textContent=msg;
+  _diagEl.appendChild(line);
+  _diagEl.scrollTop=_diagEl.scrollHeight;
+}
+
+async function atualizarCotacaoACN(sid){
+  const s=S.scenarios.find(x=>x.id===sid); if(!s)return;
+  const btn=document.getElementById(`btn-acn-${sid}`);
+
+  // Cria ou limpa painel de diagnóstico
+  _diagEl=document.getElementById(`diag-${sid}`);
+  if(_diagEl){ _diagEl.innerHTML=''; _diagEl.style.display='block'; }
+
+  if(btn){btn.disabled=true;btn.textContent='Buscando…';}
+  diagLog('Iniciando busca de cotações…');
+
+  const [acn,usdbrl]=await Promise.all([fetchACN(),fetchUSDBRL()]);
+
+  let ok=false;
+  if(acn){ s.rsuPrecoAtual=Math.round(acn*100)/100; ok=true; }
+  if(usdbrl){ s.rsuCambio=Math.round(usdbrl*100)/100; ok=true; }
+
+  if(!ok){
+    diagLog('Nenhuma fonte funcionou. Preencha manualmente.','red');
+    if(btn){btn.disabled=false;btn.textContent='🔄 Atualizar cotação';}
+    return;
+  }
+  diagLog(acn&&usdbrl?'Tudo atualizado com sucesso!':acn?'ACN atualizado (câmbio falhou)':'Câmbio atualizado (ACN falhou)','green');
+  s._rsuUltAtualizacao=new Date().toISOString();
+  save();
+  render();
+}
+
+// ── RSU GRANTS — operações na lista de grants ────────────────
+function addGrant(id){
+  const s=S.scenarios.find(x=>x.id===id);if(!s)return;
+  if(!Array.isArray(s.rsuGrants))s.rsuGrants=[];
+  const hojeYr=new Date().getFullYear();
+  s.rsuGrants.push({data:`${hojeYr}-01`,qtd:0,precoOutorga:0,vest:s.rsuVestPadrao||3,cliff:s.rsuCliffPadrao||1});
+  save();render();
+}
+function delGrant(id,gi){
+  const s=S.scenarios.find(x=>x.id===id);if(!s||!Array.isArray(s.rsuGrants))return;
+  s.rsuGrants.splice(gi,1);
+  save();render();
+}
+function updGrant(id,gi,field,val){
+  const s=S.scenarios.find(x=>x.id===id);if(!s||!Array.isArray(s.rsuGrants))return;
+  if(!s.rsuGrants[gi])return;
+  s.rsuGrants[gi][field]=val;
+  save();
+}
 function setEid(id){ C.eid=id;render(); }
 function toggleActive(id){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s.active=!s.active;save();render(); }
 function addScen(type){
   const id=_nid++;
-  S.scenarios.push({id,name:`${TYPES[type].label} #${id}`,type,active:true,color:PAL[S.scenarios.length%PAL.length],...DEFS[type]});
+  S.scenarios.push({id,name:`${TYPES[type].label} #${id}`,type,active:true,color:colorForType(type),...DEFS[type]});
+  reassignColors();
   C.eid=id;C.addOpen=false;C.tab='cenarios';save();render();
 }
 function delScen(id){
   S.scenarios=S.scenarios.filter(s=>s.id!==id);
   if(C.eid===id&&S.scenarios.length)C.eid=S.scenarios[0].id;
+  reassignColors();
   save();render();
 }
 
@@ -1061,7 +1767,7 @@ function viewCenarios(){
             onclick="event.stopPropagation();toggleActive(${s.id})">${s.active?'◉':'○'}</button>
         </div>
         <div class="sl-bot">
-          <span class="sl-badge" style="background:${TYPES[s.type].color}18;color:${TYPES[s.type].color}">${TYPES[s.type].short}</span>
+          <span class="sl-badge" style="background:${s.color}18;color:${s.color}">${TYPES[s.type].short}</span>
           ${S.scenarios.length>1?`<button class="sl-del" onclick="event.stopPropagation();delScen(${s.id})">✕</button>`:''}
         </div>
       </div>`).join('')}
@@ -1078,8 +1784,10 @@ function viewCenarios(){
     <div>
       <div class="fh">
         <div class="fh-dot" style="background:${ed.color}"></div>
-        <input class="fh-name" value="${ed.name}" oninput="updName(${ed.id},this.value)">
-        <span class="fh-type" style="background:${TYPES[ed.type].color}18;color:${TYPES[ed.type].color}">${TYPES[ed.type].label}</span>
+        <input class="fh-name" value="${ed.name}" placeholder="Nome do cenário" title="Clique para editar o nome"
+          oninput="updName(${ed.id},this.value)">
+        <span style="font-size:11px;color:var(--t3);margin:0 4px" title="Editável">✏️</span>
+        <span class="fh-type" style="background:${ed.color}18;color:${ed.color}">${TYPES[ed.type].label}</span>
       </div>
       <div class="form-body">${buildForm(ed)}</div>
       <div class="pv">
@@ -1139,6 +1847,472 @@ function viewProj(projs){
 }
 
 // ═══════════════════════════════════════════════════════════════
+// BENEFITS ENGINE
+// ═══════════════════════════════════════════════════════════════
+
+// Default benefits state per scenario id
+// Stored in S.benefits[scenarioId] = { carro:{...}, plano:{...}, ... }
+function getBen(sid){
+  if(!S.benefits) S.benefits={};
+  if(!S.benefits[sid]) S.benefits[sid]={
+    carro:{on:false,cat:'medio',seguro:0,ipva:0,manut:0,depr:0,combustivel:500,desconto:0,usaEstimativa:true,metodoPosse:'nenhum'},
+    plano:{on:false,cat:'apartamento',cob:'nacional',dep:0},
+    homeoffice:{on:false,dias:3,transp:200,alim:30},
+    vr:{on:false,valor:35,dias:22},
+    prev:{on:false,sal:0,match:100},
+    outros:{on:false,chips:[],valorExtra:0}
+  };
+  return S.benefits[sid];
+}
+
+// ── OUTROS BENEFÍCIOS — chips com estimativas ─────────────────
+const OUTROS_CHIPS=[
+  {id:'gym',    icon:'🏋️', label:'Gympass/Academia',      val:100},
+  {id:'dental', icon:'🦷', label:'Plano dental',           val:80},
+  {id:'cel',    icon:'📱', label:'Celular corporativo',    val:120},
+  {id:'vida',   icon:'🛡️', label:'Seguro de vida',         val:50},
+  {id:'plr',    icon:'💰', label:'PLR/PPR extra',          val:500},
+  {id:'edu',    icon:'🎓', label:'Bolsa de estudos/MBA',   val:400},
+  {id:'bday',   icon:'🎂', label:'Day off aniversário',    val:200},
+  {id:'ho',     icon:'💻', label:'Auxílio home office',    val:150},
+  {id:'clube',  icon:'🎁', label:'Clube de descontos',     val:40},
+];
+function estimaOutros(b){
+  const chips=b.chips||[];
+  const fromChips=OUTROS_CHIPS.filter(c=>chips.includes(c.id)).reduce((s,c)=>s+c.val,0);
+  return fromChips+(parseFloat(b.valorExtra)||0);
+}
+function togOutrosChip(sid,chipId){
+  const b=getBen(sid);
+  if(!b.outros)b.outros={on:true,chips:[],valorExtra:0};
+  if(!b.outros.chips)b.outros.chips=[];
+  const idx=b.outros.chips.indexOf(chipId);
+  if(idx>=0)b.outros.chips.splice(idx,1);
+  else b.outros.chips.push(chipId);
+  b.outros.on=b.outros.chips.length>0||(b.outros.valorExtra>0);
+  save();
+  renderBenCard(sid,'outros');
+  renderBenTotals();
+}
+// Referências de mercado por categoria (valores medianos · 2024)
+const CARRO_REF={
+  popular:   {label:'Popular (até R$60k)',    preco:50000,  seguro:180, ipva:80,  manut:150, depr:400, assina:2200},
+  medio:     {label:'Médio (R$60–120k)',      preco:90000,  seguro:320, ipva:160, manut:200, depr:700, assina:3800},
+  executivo: {label:'Executivo (R$120–250k)', preco:180000, seguro:600, ipva:320, manut:350, depr:1400,assina:6500},
+  luxo:      {label:'Luxo (R$250k+)',         preco:320000, seguro:1200,ipva:700, manut:600, depr:3000,assina:11000},
+};
+function getCarroRef(cat){ return CARRO_REF[cat]||CARRO_REF.medio; }
+
+// Parcela de financiamento: Price 36x, taxa ~1,5%/mês (média banco 2024), entrada 20%
+function parcelaFinanc(preco){
+  const principal=preco*0.8, i=0.015, n=36;
+  return Math.round(principal*(i*Math.pow(1+i,n))/(Math.pow(1+i,n)-1));
+}
+
+function estimaCarro(b){
+  const ref=getCarroRef(b.cat);
+  const seguro = b.usaEstimativa!==false ? ref.seguro : (parseFloat(b.seguro)||0);
+  const ipva   = b.usaEstimativa!==false ? ref.ipva   : (parseFloat(b.ipva)||0);
+  const manut  = b.usaEstimativa!==false ? ref.manut  : (parseFloat(b.manut)||0);
+  const depr   = b.usaEstimativa!==false ? ref.depr   : (parseFloat(b.depr)||0);
+  const comb   = parseFloat(b.combustivel)||0;
+  const desc   = parseFloat(b.desconto)||0;
+  const custosEvitados = seguro+ipva+manut+depr+comb-desc;
+
+  // valor de posse
+  let posse=0;
+  if(b.metodoPosse==='assina')   posse=ref.assina;
+  else if(b.metodoPosse==='fin') posse=parcelaFinanc(ref.preco);
+  // 'nenhum' = só custos evitados
+
+  return Math.round(custosEvitados+posse);
+}
+
+// Health plan estimator (R$/month)
+const PLANO_BASE={
+  enfermaria:{regional:350,nacional:480},
+  apartamento:{regional:580,nacional:780},
+  vip:{regional:950,nacional:1350}
+};
+function estimaPlano(b){
+  const base=(PLANO_BASE[b.cat]||PLANO_BASE.apartamento)[b.cob]||780;
+  const dep=parseInt(b.dep)||0;
+  return Math.round(base*(1+dep*0.7)); // dependentes custam ~70% do titular
+}
+
+// Home office estimator (R$/month)
+function estimaHomeoffice(b){
+  const dias=parseInt(b.dias)||3;
+  const transp=(parseFloat(b.transp)||200)*2*(dias/5); // ida+volta proporcional
+  const alim=(parseFloat(b.alim)||30)*dias*4.33;       // refeição/dia × dias/sem × semanas
+  return Math.round(transp+alim);
+}
+
+// Vale refeição (R$/month)
+function estimaVR(b){ return Math.round((parseFloat(b.valor)||35)*(parseInt(b.dias)||22)); }
+
+// Previdência match (R$/month)
+function estimaPrev(b){
+  const sal=parseFloat(b.sal)||0;
+  const match=parseFloat(b.match)||100;
+  return Math.round(sal*(match/100)*0.06); // assume 6% contribuição base do empregado
+}
+
+// Total benefits value for a scenario (R$/month)
+function totalBen(sid){
+  const b=getBen(sid);
+  let t=0;
+  if(b.carro?.on)      t+=estimaCarro(b.carro);
+  if(b.plano?.on)      t+=estimaPlano(b.plano);
+  if(b.homeoffice?.on) t+=estimaHomeoffice(b.homeoffice);
+  if(b.vr?.on)         t+=estimaVR(b.vr);
+  if(b.prev?.on)       t+=estimaPrev(b.prev);
+  if(b.outros?.on||((b.outros?.chips||[]).length>0)||(b.outros?.valorExtra>0)) t+=estimaOutros(b.outros||{});
+  return t;
+}
+
+function updBen(sid,key,field,val){
+  const b=getBen(sid);
+  if(!b[key])b[key]={};
+  b[key][field]=val;
+  save();
+  renderBenCard(sid,key);
+  renderBenTotals();
+}
+// Versão sem re-render do card — usada em inputs de texto para preservar foco
+function updBenSilent(sid,key,field,val){
+  const b=getBen(sid);
+  if(!b[key])b[key]={};
+  b[key][field]=val;
+  clearTimeout(_saveTimer2);
+  _saveTimer2=setTimeout(()=>{save();renderBenTotals();},400);
+}
+function togBen(sid,key){
+  const b=getBen(sid);
+  if(!b[key])b[key]={};
+  if(key==='outros'){
+    // outros expande/colapsa mas on é controlado pelos chips
+    b[key]._expanded=!b[key]._expanded;
+    if(b[key]._expanded===undefined)b[key]._expanded=true;
+  } else {
+    b[key].on=!b[key].on;
+  }
+  save();
+  renderBenCard(sid,key);
+  renderBenTotals();
+}
+
+function renderBenCard(sid,key){ const el=document.getElementById(`bc-${sid}-${key}`);if(el)el.outerHTML=buildBenCard(sid,key); }
+function renderBenTotals(){
+  // Sync estimativas → campos bX de cada cenário
+  S.scenarios.forEach(s=>syncBenToScenario(s.id));
+  // Atualiza totais exibidos na aba Benefícios
+  S.scenarios.forEach(s=>{
+    const el=document.getElementById(`ben-total-${s.id}`);
+    if(el)el.textContent=fK(totalBen(s.id)*12)+'/ano';
+  });
+  // Atualiza comparison table
+  const cmp=document.getElementById('ben-cmp');
+  if(cmp)cmp.outerHTML=buildCmpTable();
+  // Atualiza prévia no formulário de cenário (se visível)
+  updPreview();
+}
+
+function buildBenCard(sid,key){
+  const b=getBen(sid)[key];
+  const on = key==='outros' ? (b?._expanded||((b?.chips||[]).length>0)||(b?.valorExtra>0)) : b?.on;
+  const isExpanded = key==='outros' ? (b?._expanded!==false) : on;
+  const icons={carro:'🚗',plano:'🏥',homeoffice:'🏠',vr:'🍽️',prev:'📈',outros:'➕'};
+  const titles={carro:'Carro',plano:'Plano de Saúde',homeoffice:'Home Office',vr:'Vale Refeição',prev:'Previdência Privada',outros:'Outros Benefícios'};
+  let bodyHtml='',valEstimado=0;
+
+  if(key==='carro'){
+    valEstimado=on?estimaCarro(b):0;
+    const ref=getCarroRef(b.cat);
+    const usaEst=b.usaEstimativa!==false;
+    // breakdown for display
+    const seguro = usaEst ? ref.seguro : (parseFloat(b.seguro)||0);
+    const ipva   = usaEst ? ref.ipva   : (parseFloat(b.ipva)||0);
+    const manut  = usaEst ? ref.manut  : (parseFloat(b.manut)||0);
+    const depr   = usaEst ? ref.depr   : (parseFloat(b.depr)||0);
+    const comb   = parseFloat(b.combustivel)||0;
+    const desc   = parseFloat(b.desconto)||0;
+    bodyHtml=`
+      <div class="ben-row">
+        <span class="ben-lbl">Categoria do veículo</span>
+        <select class="ben-select" onchange="updBen(${sid},'carro','cat',this.value)">
+          ${Object.entries(CARRO_REF).map(([k,v])=>`<option value="${k}"${b.cat===k?' selected':''}>${v.label}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="ben-divider"></div>
+      <div class="ben-row">
+        <span class="ben-lbl" style="font-weight:700;color:var(--t)">Custo do carro (pago pela empresa)</span>
+        <span style="font-size:10px;color:var(--t3);cursor:pointer;text-decoration:underline"
+          onclick="updBen(${sid},'carro','usaEstimativa',${usaEst?'false':'true'})">${usaEst?'editar manualmente':'usar estimativa'}</span>
+      </div>
+
+      ${usaEst?`
+        <div class="ben-row ben-tip" style="font-style:normal;color:var(--t3)">
+          Valores de referência de mercado · clique em "editar manualmente" para personalizar
+        </div>
+        <div class="ben-row"><span class="ben-lbl">Seguro</span><span class="ben-val">${fK(seguro)}/mês</span></div>
+        <div class="ben-row"><span class="ben-lbl">IPVA (rateio mensal)</span><span class="ben-val">${fK(ipva)}/mês</span></div>
+        <div class="ben-row"><span class="ben-lbl">Manutenção</span><span class="ben-val">${fK(manut)}/mês</span></div>
+        <div class="ben-row"><span class="ben-lbl">Depreciação</span><span class="ben-val">${fK(depr)}/mês</span></div>
+      `:`
+        <div class="ben-row">
+          <span class="ben-lbl">Seguro (R$/mês)</span>
+          <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.seguro||ref.seguro)}" style="width:90px;flex:none"
+            oninput="const v=maskNum(this);updBenSilent(${sid},'carro','seguro',v)">
+        </div>
+        <div class="ben-row">
+          <span class="ben-lbl">IPVA rateio (R$/mês)</span>
+          <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.ipva||ref.ipva)}" style="width:90px;flex:none"
+            oninput="const v=maskNum(this);updBenSilent(${sid},'carro','ipva',v)">
+        </div>
+        <div class="ben-row">
+          <span class="ben-lbl">Manutenção (R$/mês)</span>
+          <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.manut||ref.manut)}" style="width:90px;flex:none"
+            oninput="const v=maskNum(this);updBenSilent(${sid},'carro','manut',v)">
+        </div>
+        <div class="ben-row">
+          <span class="ben-lbl">Depreciação (R$/mês)</span>
+          <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.depr||ref.depr)}" style="width:90px;flex:none"
+            oninput="const v=maskNum(this);updBenSilent(${sid},'carro','depr',v)">
+        </div>
+      `}
+
+      <div class="ben-divider"></div>
+      <div class="ben-row">
+        <span class="ben-lbl" style="font-weight:700;color:var(--t)">⛽ Vale combustível (R$/mês)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.combustivel??500)}" style="width:90px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'carro','combustivel',v)">
+      </div>
+      <div class="ben-row ben-tip">Saldo rotativo com teto — a empresa repõe o que você gastou até o limite definido.</div>
+
+      <div class="ben-divider"></div>
+      <div class="ben-row">
+        <span class="ben-lbl" style="font-weight:700;color:var(--red)">➖ Desconto em folha (R$/mês)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.desconto||0)}" style="width:90px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'carro','desconto',v)">
+      </div>
+      <div class="ben-row ben-tip">Desconto pelo uso do carro nos fins de semana. Reajustado anualmente pelo IPCA.</div>
+
+      <div class="ben-divider"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;margin-top:2px">
+        <div class="ben-row" style="background:var(--bg);padding:5px 8px;border-radius:5px">
+          <span class="ben-lbl">Custos evitados</span>
+          <span class="ben-val">${fK(Math.max(0,seguro+ipva+manut+depr+comb-desc))}/mês</span>
+        </div>
+        ${(()=>{const mp=b.metodoPosse||'nenhum';const posseVal=mp==='assina'?ref.assina:mp==='fin'?parcelaFinanc(ref.preco):0;return posseVal>0?`<div class="ben-row" style="background:var(--bg);padding:5px 8px;border-radius:5px"><span class="ben-lbl">+ Valor de posse</span><span class="ben-val" style="color:var(--grn)">+${fK(posseVal)}/mês</span></div>`:''})()}
+        <div class="ben-row" style="background:var(--bg);padding:6px 8px;border-radius:5px;border:1px solid var(--bd2)">
+          <span class="ben-lbl" style="font-weight:700;color:var(--t)">= Valor real do benefício</span>
+          <span class="ben-val" style="font-size:15px;color:var(--o)">${fK(valEstimado)}/mês</span>
+        </div>
+      </div>
+
+      <div class="ben-divider"></div>
+      <div class="ben-row"><span class="ben-lbl" style="font-weight:700;color:var(--t)">Valor de posse — como comparar?</span></div>
+      <div class="ben-row ben-tip" style="font-style:normal">Sem o benefício, você precisaria comprar ou alugar. Escolha o método:</div>
+      <div class="ben-row" style="gap:5px;flex-wrap:wrap">
+        ${[['nenhum','Só custos'],['fin','Financiamento 36x'],['assina','Assinatura']].map(([v,l])=>{const mp=b.metodoPosse||'nenhum';return`<button style="flex:1;padding:5px 6px;border-radius:5px;border:1px solid ${mp===v?'var(--o)':'var(--bd)'};background:${mp===v?'var(--od)':'transparent'};color:${mp===v?'var(--o)':'var(--t2)'};font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap" onclick="updBen(${sid},'carro','metodoPosse','${v}')">${l}</button>`;}).join('')}
+      </div>
+      ${(()=>{const mp=b.metodoPosse||'nenhum';
+        if(mp==='fin')return`<div class="ben-row ben-tip" style="font-style:normal">Financiamento 80% · 36x · taxa 1,5%/mês. Parcela: <strong style="color:var(--t)">${fK(parcelaFinanc(ref.preco))}/mês</strong></div>`;
+        if(mp==='assina')return`<div class="ben-row ben-tip" style="font-style:normal">Assinatura com seguro incluso (Localiza/Movida · 2024): <strong style="color:var(--t)">${fK(ref.assina)}/mês</strong></div>`;
+        return`<div class="ben-row ben-tip">Apenas custos operacionais — não considera o custo de ter um carro próprio.</div>`;
+      })()}`;
+  } else if(key==='plano'){
+    valEstimado=on?estimaPlano(b):0;
+    bodyHtml=`
+      <div class="ben-row">
+        <span class="ben-lbl">Acomodação</span>
+        <select class="ben-select" onchange="updBen(${sid},'plano','cat',this.value)">
+          <option value="enfermaria"${b.cat==='enfermaria'?' selected':''}>Enfermaria</option>
+          <option value="apartamento"${b.cat==='apartamento'?' selected':''}>Apartamento</option>
+          <option value="vip"${b.cat==='vip'?' selected':''}>VIP / Quarto individual</option>
+        </select>
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Cobertura</span>
+        <select class="ben-select" onchange="updBen(${sid},'plano','cob',this.value)">
+          <option value="regional"${b.cob==='regional'?' selected':''}>Regional</option>
+          <option value="nacional"${b.cob==='nacional'?' selected':''}>Nacional</option>
+        </select>
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Dependentes incluídos</span>
+        <input class="ben-input" type="number" value="${b.dep||0}" min="0" max="10" style="width:60px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'plano','dep',v)">
+      </div>
+      <div class="ben-divider"></div>
+      <div class="ben-row ben-tip">Estimativa baseada em preços de mercado ANS 2024 · São Paulo</div>`;
+  } else if(key==='homeoffice'){
+    valEstimado=on?estimaHomeoffice(b):0;
+    bodyHtml=`
+      <div class="ben-row">
+        <span class="ben-lbl">Dias home office/semana</span>
+        <input class="ben-input" type="number" value="${b.dias||3}" min="1" max="5" style="width:60px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'homeoffice','dias',v)">
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Seu custo transporte/dia (R$)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.transp||200)}" style="width:80px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'homeoffice','transp',v)">
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Economia em alim./dia (R$)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.alim||30)}" style="width:80px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'homeoffice','alim',v)">
+      </div>
+      <div class="ben-divider"></div>
+      <div class="ben-row ben-tip">Economia calculada: transporte (ida+volta proporcional) + alimentação nos dias em casa</div>`;
+  } else if(key==='vr'){
+    valEstimado=on?estimaVR(b):0;
+    bodyHtml=`
+      <div class="ben-row">
+        <span class="ben-lbl">Valor do ticket (R$/dia)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.valor||35)}" style="width:80px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'vr','valor',v)">
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Dias úteis/mês</span>
+        <input class="ben-input" type="number" value="${b.dias||22}" min="1" max="31" style="width:60px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'vr','dias',v)">
+      </div>`;
+  } else if(key==='prev'){
+    valEstimado=on?estimaPrev(b):0;
+    bodyHtml=`
+      <div class="ben-row">
+        <span class="ben-lbl">Seu salário bruto (R$)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.sal||0)}" style="width:100px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'prev','sal',v)">
+      </div>
+      <div class="ben-row">
+        <span class="ben-lbl">Match da empresa (%)</span>
+        <input class="ben-input" type="number" value="${b.match||100}" min="0" max="200" style="width:70px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'prev','match',v)">
+        <span style="font-size:10px;color:var(--t3)">%</span>
+      </div>
+      <div class="ben-divider"></div>
+      <div class="ben-row ben-tip">Assume contribuição base de 6% do salário. Match 100% = empresa contribui igual a você.</div>`;
+  } else if(key==='outros'){
+    const chips=b.chips||[];
+    valEstimado=estimaOutros(b);
+    const chipTotal=OUTROS_CHIPS.filter(c=>chips.includes(c.id)).reduce((s,c)=>s+c.val,0);
+    bodyHtml=`
+      <div class="ben-row ben-tip" style="font-style:normal">Clique para ativar. Valores são estimativas de mercado — ajuste abaixo se quiser.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:4px 0">
+        ${OUTROS_CHIPS.map(c=>{
+          const on=chips.includes(c.id);
+          return`<div onclick="togOutrosChip(${sid},'${c.id}')" style="
+            display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;cursor:pointer;
+            border:1px solid ${on?'var(--o)':'var(--bd)'};
+            background:${on?'var(--od)':'transparent'};
+            color:${on?'var(--o)':'var(--t2)'};font-size:11px;font-weight:600;user-select:none">
+            ${c.icon} ${c.label}
+            <span style="font-size:10px;opacity:.7">${fK(c.val)}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      ${chipTotal>0?`<div class="ben-row" style="background:var(--bg);padding:5px 8px;border-radius:5px;margin-top:2px">
+        <span class="ben-lbl">Subtotal chips selecionados</span>
+        <span class="ben-val">${fK(chipTotal)}/mês</span>
+      </div>`:''}
+      <div class="ben-divider"></div>
+      <div class="ben-row">
+        <span class="ben-lbl">Valor adicional (R$/mês)</span>
+        <input class="ben-input" type="text" inputmode="numeric" value="${fmtField(b.valorExtra||0)}" style="width:100px;flex:none"
+          oninput="const v=maskNum(this);updBenSilent(${sid},'outros','valorExtra',v);getBen(${sid}).outros.on=(getBen(${sid}).outros.chips||[]).length>0||v>0;">
+      </div>
+      <div class="ben-row ben-tip">Para benefícios não listados acima — ex: clube de férias, participação societária menor, etc.</div>`;
+  }
+
+  return`<div class="ben-card" id="bc-${sid}-${key}">
+    <div class="ben-card-hdr" onclick="togBen(${sid},'${key}')">
+      <span class="ben-icon">${icons[key]}</span>
+      <span class="ben-title">${titles[key]}</span>
+      ${valEstimado>0?`<span class="ben-val">${fK(valEstimado)}/mês</span>`:''}
+      <span class="ben-toggle">${isExpanded?'▲':'▼'}</span>
+    </div>
+    ${isExpanded?`<div class="ben-body">${bodyHtml}</div>`:`<div class="ben-body hidden"></div>`}
+  </div>`;
+}
+
+function buildCmpTable(){
+  const active=S.scenarios;
+  if(!active.length)return'';
+  const rows=[
+    {key:'carro',icon:'🚗',label:'Carro + Combustível (líquido)',fn:s=>getBen(s.id).carro?.on?estimaCarro(getBen(s.id).carro):0},
+    {key:'plano',icon:'🏥',label:'Plano de Saúde',fn:s=>getBen(s.id).plano?.on?estimaPlano(getBen(s.id).plano):0},
+    {key:'homeoffice',icon:'🏠',label:'Home Office',fn:s=>getBen(s.id).homeoffice?.on?estimaHomeoffice(getBen(s.id).homeoffice):0},
+    {key:'vr',icon:'🍽️',label:'Vale Refeição',fn:s=>getBen(s.id).vr?.on?estimaVR(getBen(s.id).vr):0},
+    {key:'prev',icon:'📈',label:'Previdência Privada',fn:s=>getBen(s.id).prev?.on?estimaPrev(getBen(s.id).prev):0},
+    {key:'outros',icon:'➕',label:'Outros',fn:s=>getBen(s.id).outros?.on?parseFloat(getBen(s.id).outros?.valor)||0:0},
+  ];
+  const totals=active.map(s=>totalBen(s.id));
+  const maxTotal=Math.max(...totals);
+
+  const headerCols=active.map(s=>`<th style="color:${s.color}">${s.name}</th>`).join('');
+  const bodyRows=rows.map(r=>{
+    const vals=active.map(s=>r.fn(s));
+    const maxV=Math.max(...vals);
+    const cells=vals.map((v,i)=>`<td class="${v>0&&v===maxV&&maxV>0?'cmp-best':''}">${v?fK(v):'-'}</td>`).join('');
+    return`<tr><td><span class="cmp-icon">${r.icon}</span>${r.label}</td>${cells}</tr>`;
+  }).join('');
+  const totalCells=active.map((s,i)=>`<td class="${totals[i]===maxTotal?'cmp-best':''}">${fK(totals[i])}/mês</td>`).join('');
+
+  return`<div class="cmp-wrap" id="ben-cmp">
+    <table class="cmp-table">
+      <thead><tr><th>Benefício</th>${headerCols}</tr></thead>
+      <tbody>
+        ${bodyRows}
+        <tr class="cmp-total"><td>Total estimado</td>${totalCells}</tr>
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function viewBeneficios(){
+  const active=S.scenarios;
+  if(!active.length) return`<div class="empty">Crie cenários na aba <em>Cenários</em> primeiro.</div>`;
+
+  const sceneCols=active.map(s=>`
+    <div>
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+        <span style="width:8px;height:8px;border-radius:50%;background:${s.color};flex-shrink:0;display:inline-block"></span>
+        <span style="font-size:13px;font-weight:700;color:${s.color}">${s.name}</span>
+        <span style="font-size:9px;padding:1px 6px;border-radius:3px;background:${s.color}18;color:${s.color}">${TYPES[s.type].short}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${['carro','plano','homeoffice','vr','prev','outros'].map(k=>buildBenCard(s.id,k)).join('')}
+      </div>
+      <div class="ben-total">
+        <span class="ben-total-lbl">Total benefícios</span>
+        <span class="ben-total-val" id="ben-total-${s.id}">${fK(totalBen(s.id)*12)}/ano</span>
+      </div>
+    </div>`).join('');
+
+  const cols=active.length===1?'1fr':active.length===2?'1fr 1fr':'repeat(auto-fill,minmax(280px,1fr))';
+
+  return`
+    <div class="ben-section-ttl">Comparação lado a lado</div>
+    ${buildCmpTable()}
+    <div class="ben-section-ttl">Configure os benefícios por cenário</div>
+    <div style="display:grid;grid-template-columns:${cols};gap:20px;align-items:start">
+      ${sceneCols}
+    </div>
+    <div class="notes" style="margin-top:16px">
+      <strong>Estimativas de mercado · São Paulo · 2024</strong><br>
+      <span class="hl">Carro</span>: seguro + IPVA + manutenção + depreciação (estimativa por categoria, editável) + vale combustível − desconto em folha ·
+      <span class="hl">Plano de saúde</span>: preços ANS por categoria e cobertura, dependentes com 70% do custo do titular ·
+      <span class="hl">Home office</span>: economia real em transporte e alimentação ·
+      <span class="hl">Previdência</span>: contribuição de 6% do salário com match da empresa
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════════════════════════════
 function render(){
@@ -1147,12 +2321,13 @@ function render(){
     [['Pessimista','pes','on-red'],['Base','base','on'],['Otimista','oti','on-grn']].map(([l,v,cls])=>
       `<button class="pill${C.eq===v?' '+cls:''}" onclick="C.eq='${v}';render()">${l}</button>`).join('');
   document.getElementById('tabs').innerHTML=
-    [['dash','Dashboard'],['cenarios','Cenários'],['proj','Projeção 10 Anos']].map(([k,l])=>
+    [['dash','Dashboard'],['cenarios','Cenários'],['beneficios','Benefícios'],['proj','Projeção 10 Anos']].map(([k,l])=>
       `<button class="tb${C.tab===k?' on':''}" onclick="C.tab='${k}';render()">${l}</button>`).join('');
   const projs=computeAll(),view=document.getElementById('view');
-  if(C.tab==='dash')          view.innerHTML=viewDash(projs);
-  else if(C.tab==='cenarios') view.innerHTML=viewCenarios();
-  else                        view.innerHTML=viewProj(projs);
+  if(C.tab==='dash')             view.innerHTML=viewDash(projs);
+  else if(C.tab==='cenarios')    view.innerHTML=viewCenarios();
+  else if(C.tab==='beneficios')  view.innerHTML=viewBeneficios();
+  else                           view.innerHTML=viewProj(projs);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1164,10 +2339,11 @@ function boot(){
     document.getElementById('btn-save').style.display='none';
     document.getElementById('sync-dot').style.display='none';
   }
+  reassignColors(); // garante cores distintas para mesmo tipo
   if(!S.scenarios.find(s=>s.id===C.eid)) C.eid=S.scenarios[0]?.id||1;
   document.getElementById('app').classList.add('show');
   render();
 }
 </script>
 </body>
-</html> 
+</html>
