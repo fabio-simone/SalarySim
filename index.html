@@ -270,6 +270,10 @@ th:first-child{background:var(--s2)!important}
     <div class="lk-sub">Propostas Salariais · Brasil 2024</div>
     <div class="lk-bar"></div>
 
+    <div id="lk-config-warn" style="display:none;background:#ef444420;border:1px solid #ef444440;border-radius:6px;padding:8px 12px;font-size:10px;color:#f87171;margin-bottom:16px;text-align:left">
+      ⚠️ Credenciais Supabase não configuradas. Edite o <code style="background:#fff1;padding:1px 4px;border-radius:3px">index.html</code> e substitua <code style="background:#fff1;padding:1px 4px;border-radius:3px">SEU_PROJETO</code> e <code style="background:#fff1;padding:1px 4px;border-radius:3px">SUA_CHAVE_ANON_PUBLICA</code>.
+    </div>
+
     <div class="lk-tabs">
       <button class="lk-tab on" onclick="authTab('login')">Entrar</button>
       <button class="lk-tab" onclick="authTab('signup')">Criar conta</button>
@@ -341,10 +345,12 @@ const SUPABASE_URL  = 'https://SEU_PROJETO.supabase.co';
 const SUPABASE_ANON = 'SUA_CHAVE_ANON_PUBLICA';
 // ═══════════════════════════════════════════════════════════════
 
+const _CREDS_OK = !SUPABASE_URL.includes('SEU_PROJETO') && !SUPABASE_ANON.includes('SUA_CHAVE');
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let _authMode = 'login';
 let _currentUser = null;
 let _saveTimer = null;
+let _bootStarted = false;
 
 // ── AUTH UI ──────────────────────────────────────────────────
 function authTab(mode){
@@ -368,6 +374,8 @@ function setErr(msg){ document.getElementById('lk-err').textContent=msg; documen
 function setOk(msg) { document.getElementById('lk-ok').textContent=msg;  document.getElementById('lk-err').textContent=''; }
 
 async function authAction(){
+  if(!_CREDS_OK){ setErr('Credenciais do Supabase não configuradas — edite o index.html.'); return; }
+
   const email = document.getElementById('lk-email').value.trim();
   const pw    = document.getElementById('lk-pw').value;
   const pw2   = document.getElementById('lk-pw2').value;
@@ -376,6 +384,7 @@ async function authAction(){
   if(!email){ setErr('Informe o e-mail.'); return; }
   if(!pw){ setErr('Informe a senha.'); return; }
   if(_authMode==='signup' && pw!==pw2){ setErr('As senhas não coincidem.'); return; }
+  if(_authMode==='signup' && pw.length<6){ setErr('Senha muito curta — mínimo 6 caracteres.'); return; }
 
   btn.disabled=true;
   btn.innerHTML='<span class="lk-spinner"></span>Aguarde…';
@@ -386,21 +395,41 @@ async function authAction(){
     if(_authMode==='login'){
       ({data,error} = await sb.auth.signInWithPassword({email,password:pw}));
     } else {
-      ({data,error} = await sb.auth.signUp({email,password:pw}));
+      ({data,error} = await sb.auth.signUp({
+        email, password:pw,
+        options:{ emailRedirectTo: window.location.href.split('#')[0] }
+      }));
     }
 
     if(error) throw error;
 
     if(_authMode==='signup' && !data.session){
-      setOk('Conta criada! Verifique seu e-mail para confirmar o cadastro.');
-      btn.disabled=false; btn.textContent='Criar conta';
+      // Confirmação de e-mail pendente → mostra instruções e volta para login
+      authTab('login');
+      document.getElementById('lk-email').value = email;
+      setOk('✓ Conta criada! Enviamos um link de confirmação para ' + email + '. Clique no link e volte para fazer login.');
+      btn.disabled=false; btn.textContent='Entrar';
       return;
     }
 
-    _currentUser = data.user || data.session?.user;
-    await bootFromCloud();
+    if(!_bootStarted){
+      _bootStarted = true;
+      _currentUser = data.user || data.session?.user;
+      await bootFromCloud();
+    }
   } catch(e){
-    setErr(e.message||'Erro ao autenticar.');
+    let msg = e.message || 'Erro ao autenticar.';
+    if(msg === 'Failed to fetch')
+      msg = 'Falha de conexão com o Supabase. Verifique as credenciais no index.html.';
+    else if(/email.not.confirmed|email_not_confirmed/i.test(msg))
+      msg = 'E-mail ainda não confirmado. Verifique sua caixa de entrada e clique no link de ativação.';
+    else if(/invalid.login.credentials/i.test(msg))
+      msg = 'E-mail ou senha incorretos.';
+    else if(/user.already.registered|already.been.registered/i.test(msg))
+      msg = 'Este e-mail já está cadastrado. Clique em "Entrar".';
+    else if(/password.should.be.at.least/i.test(msg))
+      msg = 'Senha muito curta — mínimo 6 caracteres.';
+    setErr(msg);
     btn.disabled=false;
     btn.textContent = _authMode==='login'?'Entrar':'Criar conta';
   }
@@ -449,7 +478,8 @@ async function bootFromCloud(){
       else loadLocal();
     } catch(e){ loadLocal(); }
   } else {
-    loadLocal(); // primeira vez: começa limpo
+    loadLocal(); // primeira vez: começa com cenário limpo
+    await saveToCloud(true); // cria o registro inicial no Supabase
   }
 
   setSyncStatus('ok');
@@ -528,15 +558,41 @@ function save(){
 }
 
 // ── CHECK SESSION ON LOAD ─────────────────────────────────────
-(async()=>{
-  const { data:{session} } = await sb.auth.getSession();
-  if(session){
+
+// Mostra aviso se as credenciais ainda são placeholder
+if(!_CREDS_OK){
+  const warn = document.getElementById('lk-config-warn');
+  if(warn) warn.style.display = 'block';
+}
+
+// Listener para email de confirmação: quando o usuário clica no link,
+// o Supabase redireciona para cá com hash tokens e dispara SIGNED_IN
+sb.auth.onAuthStateChange(async (event, session)=>{
+  if(_bootStarted) return;
+  if(event === 'SIGNED_IN' && session){
+    const isEmailConfirm = window.location.hash.includes('type=signup');
+    if(isEmailConfirm){
+      // Limpa o hash da URL para não reprocessar
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      setOk('✓ E-mail confirmado! Carregando seu perfil…');
+    }
+    _bootStarted = true;
     _currentUser = session.user;
     await bootFromCloud();
-  } else {
+  }
+});
+
+(async()=>{
+  if(!_CREDS_OK) return; // sem credenciais válidas, não tenta autenticar
+  const { data:{session} } = await sb.auth.getSession();
+  if(session && !_bootStarted){
+    _bootStarted = true;
+    _currentUser = session.user;
+    await bootFromCloud();
+  } else if(!session){
     clearLocal(); // sem sessão: limpa qualquer dado residual
   }
-  // lock stays visible if no session (user must login or continue local)
+  // lock permanece visível se sem sessão (usuário deve logar ou continuar local)
 })();
 
 // ═══════════════════════════════════════════════════════════════
