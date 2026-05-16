@@ -1577,40 +1577,39 @@ function updStr(id,field,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)retu
 function updName(id,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s.name=val;save(); }
 
 // ── COTAÇÃO ONLINE ───────────────────────────────────────────
-// USD/BRL: AwesomeAPI (brasileira, CORS habilitado nativamente, sem auth)
-// Ações: Stooq via allorigins (CORS proxy gratuito, sem auth)
+// ACN:    Yahoo Finance via corsproxy.io (CORS proxy gratuito, sem auth)
+// USD/BRL: AwesomeAPI (brasileira, CORS nativo, sem auth)
 
 async function fetchACN(){
-  // Brapi: API brasileira, CORS nativo, gratuita, sem auth para cotações básicas
-  const apis=[
+  const PROXY = 'https://corsproxy.io/?';
+  const apis = [
     {
-      nome:'brapi',
-      url:'https://brapi.dev/api/quote/ACN?token=guest',
-      parse:async r=>{
-        const j=await r.json();
-        const price=j?.results?.[0]?.regularMarketPrice;
-        return price||null;
+      nome: 'yahoo-v8',
+      url: PROXY + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d'),
+      parse: async r => {
+        const j = await r.json();
+        return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
       }
     },
     {
-      nome:'brapi-v2',
-      url:'https://brapi.dev/api/quote/ACN',
-      parse:async r=>{
-        const j=await r.json();
-        return j?.results?.[0]?.regularMarketPrice||null;
+      nome: 'yahoo-v8-alt',
+      url: PROXY + encodeURIComponent('https://query2.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d'),
+      parse: async r => {
+        const j = await r.json();
+        return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
       }
     },
   ];
   for(const api of apis){
     diagLog(`Tentando ${api.nome}…`);
     try{
-      const res=await fetch(api.url);
+      const res = await fetch(api.url);
       if(!res.ok){ diagLog(`✗ ${api.nome}: HTTP ${res.status}`,'red'); continue; }
-      const price=await api.parse(res);
+      const price = await api.parse(res);
       if(!price||isNaN(price)){ diagLog(`✗ ${api.nome}: sem preço na resposta`,'red'); continue; }
       diagLog(`✓ ${api.nome}: ACN = $${price}`,'green');
       return parseFloat(price);
-    }catch(e){
+    } catch(e){
       diagLog(`✗ ${api.nome}: ${e.message}`,'red');
     }
   }
