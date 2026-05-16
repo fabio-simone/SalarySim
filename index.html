@@ -1320,10 +1320,17 @@ function formCLT(s){
             statusLabel=`${Math.round(frac*100)}% vested`;
             statusColor='#fbbf24';
           }
+          const pctChg = gPreco>0 ? (precoAtual-gPreco)/gPreco*100 : null;
+          const pctChgHtml = pctChg!==null
+            ? `<span style="font-size:10px;font-weight:700;color:${pctChg>=0?'var(--grn)':'var(--red)'};font-family:monospace">
+                ${pctChg>=0?'▲':'▼'} ${pctChg>=0?'+':''}${pctChg.toFixed(1)}%
+               </span>`
+            : '';
           return`<div style="background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
               <span style="font-size:11px;font-weight:700;color:var(--t)">Grant #${gi+1}</span>
               <span style="font-size:10px;color:${statusColor};font-weight:700">${statusLabel}</span>
+              ${pctChgHtml}
               <span style="flex:1"></span>
               <span style="font-size:11px;color:var(--grn);font-family:monospace;font-weight:700">${fK(valAtual)}</span>
               <button onclick="delGrant(${id},${gi})" style="background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0">✕</button>
@@ -1379,7 +1386,54 @@ function formCLT(s){
             </div>
           </div>
         </div>
-      </div>`:''}
+      </div>
+
+      <div class="fc2" style="margin-top:10px">${(()=>{
+        const grantsComPreco = grants.filter(g=>parseFloat(g.precoOutorga)>0&&parseFloat(g.qtd)>0);
+        if(!grantsComPreco.length) return '';
+        const totalQtdP = grantsComPreco.reduce((a,g)=>a+parseFloat(g.qtd),0);
+        const weightedSum = grantsComPreco.reduce((a,g)=>a+parseFloat(g.qtd)*parseFloat(g.precoOutorga),0);
+        const mediaOutorga = weightedSum/totalQtdP;
+        const variacaoMedia = precoAtual>0&&mediaOutorga>0 ? (precoAtual-mediaOutorga)/mediaOutorga*100 : null;
+        const ganhoTotal = grantsComPreco.reduce((a,g)=>a+parseFloat(g.qtd)*(precoAtual-parseFloat(g.precoOutorga))*cambio,0);
+
+        const rows = grantsComPreco.map((g,i)=>{
+          const gQtd=parseFloat(g.qtd), gP=parseFloat(g.precoOutorga);
+          const pct=precoAtual>0&&gP>0?(precoAtual-gP)/gP*100:null;
+          const ganho=gQtd*(precoAtual-gP)*cambio;
+          const grantYrG=g.data?parseInt(String(g.data).slice(0,4)):hojeYr;
+          const cor=pct>=0?'var(--grn)':'var(--red)';
+          return \`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
+            <span style="font-size:10px;color:var(--t2);min-width:80px;flex-shrink:0">Grant #\${i+1} (\${grantYrG})</span>
+            <span style="font-size:10px;color:var(--t3);flex:1">US$ \${gP.toFixed(2)} → US$ \${precoAtual.toFixed(2)}</span>
+            \${pct!==null?\`<span style="font-size:10px;font-weight:700;color:\${cor};white-space:nowrap">\${pct>=0?'▲ +':'▼ '}\${pct.toFixed(1)}%</span>\`:''}
+            <span style="font-size:11px;font-weight:700;font-family:monospace;color:\${ganho>=0?'var(--grn)':'var(--red)'};white-space:nowrap">\${fK(ganho)}</span>
+          </div>\`;
+        }).join('');
+
+        return \`<div style="background:var(--bg);border:1px solid #c084fc30;border-radius:6px;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--bd);background:#c084fc08">
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#c084fc">📊 Análise de Valorização vs Outorga</span>
+          </div>
+          <div style="padding:10px 12px">
+            \${rows}
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd2)">
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Preço médio ponderado</div>
+                <div style="font-size:14px;font-weight:800;font-family:monospace;color:var(--t)">US$ \${mediaOutorga.toFixed(2)}</div>
+                \${variacaoMedia!==null?\`<div style="font-size:10px;margin-top:2px;color:\${variacaoMedia>=0?'var(--grn)':'var(--red)'}">\${variacaoMedia>=0?'▲ atual +':'▼ atual '}\${variacaoMedia.toFixed(1)}% acima da média</div>\`:''}
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Ganho / Perda total (portfólio)</div>
+                <div style="font-size:14px;font-weight:800;font-family:monospace;color:\${ganhoTotal>=0?'var(--grn)':'var(--red)'}">
+                  \${ganhoTotal>=0?'+':''}\${fK(ganhoTotal)}
+                </div>
+                <div style="font-size:10px;color:var(--t3);margin-top:2px">vs preço de outorga · todas as ações</div>
+              </div>
+            </div>
+          </div>
+        </div>\`;
+      })()}</div>`:''}
 
       ${fld('Grants futuros recorrentes','',
         'Ativo: assume que a empresa concede novos grants no futuro (Accenture concede anualmente). Usa a quantidade do último grant histórico como referência.',
