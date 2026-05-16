@@ -1403,36 +1403,36 @@ function formCLT(s){
           const ganho=gQtd*(precoAtual-gP)*cambio;
           const grantYrG=g.data?parseInt(String(g.data).slice(0,4)):hojeYr;
           const cor=pct>=0?'var(--grn)':'var(--red)';
-          return \`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
-            <span style="font-size:10px;color:var(--t2);min-width:80px;flex-shrink:0">Grant #\${i+1} (\${grantYrG})</span>
-            <span style="font-size:10px;color:var(--t3);flex:1">US$ \${gP.toFixed(2)} → US$ \${precoAtual.toFixed(2)}</span>
-            \${pct!==null?\`<span style="font-size:10px;font-weight:700;color:\${cor};white-space:nowrap">\${pct>=0?'▲ +':'▼ '}\${pct.toFixed(1)}%</span>\`:''}
-            <span style="font-size:11px;font-weight:700;font-family:monospace;color:\${ganho>=0?'var(--grn)':'var(--red)'};white-space:nowrap">\${fK(ganho)}</span>
-          </div>\`;
+          return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
+            <span style="font-size:10px;color:var(--t2);min-width:80px;flex-shrink:0">Grant #${i+1} (${grantYrG})</span>
+            <span style="font-size:10px;color:var(--t3);flex:1">US$ ${gP.toFixed(2)} → US$ ${precoAtual.toFixed(2)}</span>
+            ${pct!==null?`<span style="font-size:10px;font-weight:700;color:${cor};white-space:nowrap">${pct>=0?'▲ +':'▼ '}${pct.toFixed(1)}%</span>`:''}
+            <span style="font-size:11px;font-weight:700;font-family:monospace;color:${ganho>=0?'var(--grn)':'var(--red)'};white-space:nowrap">${fK(ganho)}</span>
+          </div>`;
         }).join('');
 
-        return \`<div style="background:var(--bg);border:1px solid #c084fc30;border-radius:6px;overflow:hidden">
+        return `<div style="background:var(--bg);border:1px solid #c084fc30;border-radius:6px;overflow:hidden">
           <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--bd);background:#c084fc08">
             <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#c084fc">📊 Análise de Valorização vs Outorga</span>
           </div>
           <div style="padding:10px 12px">
-            \${rows}
+            ${rows}
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--bd2)">
               <div>
                 <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Preço médio ponderado</div>
-                <div style="font-size:14px;font-weight:800;font-family:monospace;color:var(--t)">US$ \${mediaOutorga.toFixed(2)}</div>
-                \${variacaoMedia!==null?\`<div style="font-size:10px;margin-top:2px;color:\${variacaoMedia>=0?'var(--grn)':'var(--red)'}">\${variacaoMedia>=0?'▲ atual +':'▼ atual '}\${variacaoMedia.toFixed(1)}% acima da média</div>\`:''}
+                <div style="font-size:14px;font-weight:800;font-family:monospace;color:var(--t)">US$ ${mediaOutorga.toFixed(2)}</div>
+                ${variacaoMedia!==null?`<div style="font-size:10px;margin-top:2px;color:${variacaoMedia>=0?'var(--grn)':'var(--red)'}">${variacaoMedia>=0?'▲ atual +':'▼ atual '}${variacaoMedia.toFixed(1)}% acima da média</div>`:''}
               </div>
               <div>
                 <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Ganho / Perda total (portfólio)</div>
-                <div style="font-size:14px;font-weight:800;font-family:monospace;color:\${ganhoTotal>=0?'var(--grn)':'var(--red)'}">
-                  \${ganhoTotal>=0?'+':''}\${fK(ganhoTotal)}
+                <div style="font-size:14px;font-weight:800;font-family:monospace;color:${ganhoTotal>=0?'var(--grn)':'var(--red)'}">
+                  ${ganhoTotal>=0?'+':''}${fK(ganhoTotal)}
                 </div>
                 <div style="font-size:10px;color:var(--t3);margin-top:2px">vs preço de outorga · todas as ações</div>
               </div>
             </div>
           </div>
-        </div>\`;
+        </div>`;
       })()}</div>`:''}
 
       ${fld('Grants futuros recorrentes','',
