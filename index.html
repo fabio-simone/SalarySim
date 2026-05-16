@@ -393,7 +393,7 @@ async function authAction(){
     } else {
       ({data,error} = await sb.auth.signUp({
         email, password:pw,
-        options:{ emailRedirectTo: window.location.href.split('#')[0] }
+        options:{ emailRedirectTo: 'https://salary-sim-pi.vercel.app' }
       }));
     }
 
