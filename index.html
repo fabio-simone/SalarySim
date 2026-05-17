@@ -900,21 +900,14 @@ function projCLT(s,yr){
     }
   }
 
-  // ── Signin Bonus (pago 2x no Ano 1) ──────────────────────────
-  const signinBruto = yr===1 ? (parseFloat(s.signinBonus)||0) : 0;
-  // Cada parcela (signinBruto/2) tributada como IR sobre o mês de pagamento
-  const liqSignin = signinBruto > 0
-    ? signinBruto - Math.max(0, calcIr(signinBruto/2)) * 2
-    : 0;
-
   const bens=((getBenEfetivo(s,'bSaude'))+(getBenEfetivo(s,'bAlim'))+(getBenEfetivo(s,'bTrans'))+(getBenEfetivo(s,'bPrev'))+(getBenEfetivo(s,'bOut')))*12+(getBenEfetivo(s,'bCarro'));
-  const bruto=sal*12+sal+ferBruto+pprBruto+bonBruto+eqBruto+esppBruto+signinBruto;
-  const liq=liqMes+liq13+liqFer+liqPpr+liqBon+liqEq+liqEspp+liqSignin;
+  const bruto=sal*12+sal+ferBruto+pprBruto+bonBruto+eqBruto+esppBruto;
+  const liq=liqMes+liq13+liqFer+liqPpr+liqBon+liqEq+liqEspp;
   const ctc=(sal+encargo(sal))*12+sal+bens;
   return{bruto,liq,trib:Math.max(0,bruto-liq),bens,ctc,bk:{
     salLiq:liqMes, decLiq:liq13, ferLiq:liqFer,
-    pprLiq:liqPpr, bonLiq:liqBon, rsuLiq:liqEq, esppLiq:liqEspp, signinLiq:liqSignin,
-    salBruto:sal*12, pprBruto, bonBruto, rsuBruto:eqBruto, esppBruto, signinBruto,
+    pprLiq:liqPpr, bonLiq:liqBon, rsuLiq:liqEq, esppLiq:liqEspp, signinLiq:0,
+    salBruto:sal*12, pprBruto, bonBruto, rsuBruto:eqBruto, esppBruto,
   }};
 }
 
@@ -1009,15 +1002,25 @@ function projFundo(s,yr){
 
 function project(s,yr){
   if(!s.active)return{bruto:0,liq:0,trib:0,bens:0,ctc:0};
+  let p;
   switch(s.type){
-    case'CLT':     return projCLT(s,yr);
-    case'PJ':      return projPJ(s,yr);
-    case'NON_EQ':  return projNonEq(s,yr);
-    case'EQUITY':  return projEquity(s,yr);
-    case'BIG_TECH':return projBigTech(s,yr);
-    case'FUNDO':   return projFundo(s,yr);
+    case'CLT':     p=projCLT(s,yr); break;
+    case'PJ':      p=projPJ(s,yr); break;
+    case'NON_EQ':  p=projNonEq(s,yr); break;
+    case'EQUITY':  p=projEquity(s,yr); break;
+    case'BIG_TECH':p=projBigTech(s,yr); break;
+    case'FUNDO':   p=projFundo(s,yr); break;
+    default: return{bruto:0,liq:0,trib:0,bens:0,ctc:0};
   }
-  return{bruto:0,liq:0,trib:0,bens:0,ctc:0};
+  // Signin bonus — comum a todos os tipos, pago 2x no Ano 1
+  if(yr===1 && (parseFloat(s.signinBonus)||0)>0){
+    const sb=parseFloat(s.signinBonus);
+    const liqSb=sb-Math.max(0,calcIr(sb/2))*2;
+    p={...p,bruto:p.bruto+sb,liq:p.liq+liqSb,trib:p.trib+(sb-liqSb)};
+    if(p.bk) p.bk.signinLiq=liqSb;
+    else p.bk={signinLiq:liqSb};
+  }
+  return p;
 }
 
 function computeAll(){
@@ -1287,8 +1290,6 @@ function formCLT(s){
       ${fld('Crescimento Salarial Anual','% a.a.','Reajuste anual médio esperado (inflação + mérito + promoções). 5–8% é conservador.',ni(id,'crescSal','','% a.a.',0.5,-20,s.crescSal))}
       ${fld('PPR / PLR Anual','valor bruto recebido','Participação nos resultados. Tabela exclusiva de fonte — menor alíquota que o IR normal. Zero até R$6.677/ano.',ni(id,'ppr','R$','',1000,0,s.ppr))}
       ${fld('Bônus Discricional Anual','valor bruto recebido','Bônus fora do PPR. Tributado pelo IR progressivo (tabela mensal sobre valor mensal equivalente).',ni(id,'bonus','R$','',1000,0,s.bonus))}
-      ${fld('Signin Bonus','valor bruto total','Pago em 2 parcelas no Ano 1. IR progressivo sobre cada parcela separadamente. Claw-back aplicado se sair antes do prazo.',ni(id,'signinBonus','R$','',5000,0,s.signinBonus))}
-      ${fld('Claw-back (meses)','meses de carência','Período mínimo de permanência para não devolver o signin bonus. Apenas informativo — a projeção assume que você fica.',ni(id,'signinClawbackMeses','','meses',6,0,s.signinClawbackMeses))}
     `,true)+
 
     sec('RSU / Equity — Grants históricos','#c084fc',`
@@ -1632,14 +1633,21 @@ function formFundo(s){
 }
 
 function buildForm(s){
+  const id=s.id;
+  let form='';
   switch(s.type){
-    case'CLT':     return formCLT(s);
-    case'PJ':      return formPJ(s);
-    case'NON_EQ':  return formNonEq(s);
-    case'EQUITY':  return formEquity(s);
-    case'BIG_TECH':return formBigTech(s);
-    case'FUNDO':   return formFundo(s);
-  }return'';
+    case'CLT':     form=formCLT(s); break;
+    case'PJ':      form=formPJ(s); break;
+    case'NON_EQ':  form=formNonEq(s); break;
+    case'EQUITY':  form=formEquity(s); break;
+    case'BIG_TECH':form=formBigTech(s); break;
+    case'FUNDO':   form=formFundo(s); break;
+  }
+  return form + sec('Signin Bonus','#f472b6',`
+    <div class="fc2">${ibox('#f472b6','Bônus de contratação pago em 2 parcelas no Ano 1. A projeção assume que você fica (claw-back não deduz automaticamente).')}</div>
+    ${fld('Signin Bonus','valor bruto total','Cada parcela (total ÷ 2) tributada como IR progressivo separadamente.',ni(id,'signinBonus','R$','',5000,0,s.signinBonus))}
+    ${fld('Claw-back','meses de carência','Informativo — quantos meses você precisa ficar para não devolver o bonus.',ni(id,'signinClawbackMeses','','meses',6,0,s.signinClawbackMeses))}
+  `,true);
 }
 
 // ═══════════════════════════════════════════════════════════════
