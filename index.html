@@ -1674,52 +1674,38 @@ function updStr(id,field,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)retu
 function updName(id,val){ const s=S.scenarios.find(x=>x.id===id);if(!s)return;s.name=val;save(); }
 
 // ── COTAÇÃO ONLINE ───────────────────────────────────────────
-// ACN:    Yahoo Finance via corsproxy.io (CORS proxy gratuito, sem auth)
-// USD/BRL: AwesomeAPI (brasileira, CORS nativo, sem auth)
+// ACN:    /api/quote (Vercel serverless → Yahoo Finance server-side, sem CORS)
+// USD/BRL: AwesomeAPI (CORS nativo)
 
 async function fetchACN(){
-  const YAHOO1 = 'https://query1.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d';
-  const YAHOO2 = 'https://query2.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d';
   const parseYahoo = async r => {
     const j = await r.json();
-    return j?.chart?.result?.[0]?.meta?.regularMarketPrice || null;
+    return j?.chart?.result?.[0]?.meta?.regularMarketPrice || j?.price || null;
   };
   const apis = [
     {
-      nome: 'corsproxy+yahoo1',
-      url: 'https://corsproxy.io/?' + encodeURIComponent(YAHOO1),
+      nome: 'vercel-api',
+      url: '/api/quote?symbol=ACN',
+      parse: async r => { const j = await r.json(); return j?.price || null; }
+    },
+    {
+      nome: 'yahoo1-direct',
+      url: 'https://query1.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d',
       parse: parseYahoo
     },
     {
-      nome: 'allorigins+yahoo1',
-      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(YAHOO1),
+      nome: 'yahoo2-direct',
+      url: 'https://query2.finance.yahoo.com/v8/finance/chart/ACN?interval=1d&range=1d',
       parse: parseYahoo
-    },
-    {
-      nome: 'corsproxy+yahoo2',
-      url: 'https://corsproxy.io/?' + encodeURIComponent(YAHOO2),
-      parse: parseYahoo
-    },
-    {
-      nome: 'allorigins+yahoo2',
-      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(YAHOO2),
-      parse: parseYahoo
-    },
-    {
-      nome: 'stooq',
-      url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://stooq.com/q/l/?s=acn.us&f=sd2t2ohlcv&h&e=csv'),
-      parse: async r => {
-        const txt = await r.text();
-        const lines = txt.trim().split('\n');
-        const v = parseFloat(lines[1]?.split(',')[4]);
-        return isNaN(v) ? null : v;
-      }
     },
   ];
   for(const api of apis){
     diagLog(`Tentando ${api.nome}…`);
     try{
-      const res = await fetch(api.url);
+      const ac = new AbortController();
+      const t = setTimeout(()=>ac.abort(), 8000);
+      const res = await fetch(api.url, {signal: ac.signal});
+      clearTimeout(t);
       if(!res.ok){ diagLog(`✗ ${api.nome}: HTTP ${res.status}`,'red'); continue; }
       const price = await api.parse(res);
       if(!price||isNaN(price)){ diagLog(`✗ ${api.nome}: sem preço na resposta`,'red'); continue; }
