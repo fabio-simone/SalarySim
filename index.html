@@ -851,6 +851,21 @@ function projCLT(s,yr){
 
   liqEq = eqBruto > 0 ? eqBruto - Math.max(0, calcIr(eqBruto/12))*12 : 0;
 
+  // ── Grant de promoção MD (vest 3 anos a partir de mdAno) ──
+  if(mdAno>0 && (parseFloat(s.mdGrantUSD)||0)>0){
+    const grantUSD = parseFloat(s.mdGrantUSD);
+    const yrAbs = hojeYr + yr - 1;
+    // Vests no mdAno, mdAno+1, mdAno+2 (3 parcelas iguais)
+    for(let v=0;v<3;v++){
+      if(yrAbs === (hojeYr + mdAno - 1 + v)){
+        const cambioV = cambioBase * Math.pow(1+(crescCambio/100), Math.max(0, yrAbs-hojeYr));
+        const parcelaBRL = (grantUSD/3) * cambioV;
+        eqBruto += parcelaBRL;
+        liqEq   += parcelaBRL - Math.max(0, calcIr(parcelaBRL/12))*12;
+      }
+    }
+  }
+
   // ── ESPP (pré-MD) + VAPE (pós-MD) ────────────────────────
   // ESPP pré-MD: compra com 15% de desconto → ganho imediato ~17,6%, GC 15%
   // VAPE pós-MD: compra ao preço de mercado, sem desconto
@@ -1503,6 +1518,8 @@ function formCLT(s){
       ${fld('Bônus discricionário pós-MD','valor bruto',
         'Novo bônus como MD. Tributado pelo IR progressivo sobre valor mensal equivalente.',
         ni(id,'mdBonus','R$','',5000,0,s.mdBonus||0))}
+      ${fld('Grant de promoção MD','valor total em US$','Grant único de equity na promoção a MD (~US$ 50k–150k na ACN). Vesta em 3 anos a partir do ano da promoção. Tributado como renda no vesting.',
+        ni(id,'mdGrantUSD','US$','',10000,0,s.mdGrantUSD||0))}
       <div class="fc2"><div class="fsec-hdr" style="margin-top:8px">
         <div class="fsec-bar" style="background:#34d399"></div>
         <span class="fsec-ttl" style="color:#34d399">VAPE pós-MD</span>
