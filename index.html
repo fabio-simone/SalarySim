@@ -456,12 +456,17 @@ async function doLogout(){
 
 // ── SUPABASE PERSISTENCE ─────────────────────────────────────
 async function bootFromCloud(){
-  hideLock();
-
   document.getElementById('h-email').textContent = _currentUser?.email || '';
   document.getElementById('btn-save').style.display = 'flex';
 
+  // Mostra o app imediatamente com dados locais — sem tela preta
+  loadLocal();
+  hideLock();
+  boot();
+
+  // Busca dados da nuvem em background e re-renderiza se houver dados
   try {
+    setSyncStatus('syncing');
     const { data } = await sb
       .from('simulacoes')
       .select('payload')
@@ -473,20 +478,15 @@ async function bootFromCloud(){
     if(data?.payload){
       try{
         const parsed = JSON.parse(data.payload);
-        if(parsed.S?.scenarios?.length){ S=parsed.S; _nid=parsed._nid||2; }
-        else loadLocal();
-      } catch(e){ loadLocal(); }
+        if(parsed.S?.scenarios?.length){ S=parsed.S; _nid=parsed._nid||2; render(); }
+      } catch(e){}
     } else {
-      loadLocal();
-      await saveToCloud(true);
+      await saveToCloud(true); // primeira vez: cria registro
     }
     setSyncStatus('ok');
   } catch(e){
-    loadLocal();
     setSyncStatus('error');
   }
-
-  boot();
 }
 
 async function saveToCloud(silent=false){
