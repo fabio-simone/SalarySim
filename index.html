@@ -493,8 +493,7 @@ async function saveToCloud(silent=false){
   if(!_currentUser) return;
 
   const btn = document.getElementById('btn-save');
-  setSyncStatus('syncing');
-  if(!silent){ btn.classList.add('saving'); btn.textContent='💾 Salvando…'; }
+  if(!silent){ setSyncStatus('syncing'); btn.classList.add('saving'); btn.textContent='💾 Salvando…'; }
 
   const payload = JSON.stringify({S, _nid});
 
