@@ -400,10 +400,10 @@ async function authAction(){
     if(error) throw error;
 
     if(_authMode==='signup' && !data.session){
-      // Confirmação de e-mail pendente → mostra instruções e volta para login
+      // Confirmação de e-mail pendente (caso confirmação ainda esteja ativa no Supabase)
       authTab('login');
       document.getElementById('lk-email').value = email;
-      setOk('✓ Conta criada! Enviamos um link de confirmação para ' + email + '. Clique no link e volte para fazer login.');
+      setOk('✓ Conta criada! Faça login com suas credenciais.');
       btn.disabled=false; btn.textContent='Entrar';
       return;
     }
