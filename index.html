@@ -466,14 +466,12 @@ async function bootFromCloud(){
 
   // Busca dados da nuvem em background e re-renderiza se houver dados
   try {
-    setSyncStatus('syncing');
-    const { data } = await sb
-      .from('simulacoes')
-      .select('payload')
+    const timeout = new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));
+    const query = sb.from('simulacoes').select('payload')
       .eq('user_id', _currentUser.id)
       .order('updated_at', { ascending: false })
-      .limit(1)
-      .single();
+      .limit(1).single();
+    const { data } = await Promise.race([query, timeout]);
 
     if(data?.payload){
       try{
@@ -485,7 +483,7 @@ async function bootFromCloud(){
     }
     setSyncStatus('ok');
   } catch(e){
-    setSyncStatus('error');
+    setSyncStatus('ok'); // falha silenciosa — dados locais já carregados
   }
 }
 
