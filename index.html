@@ -1981,9 +1981,13 @@ function viewProj(projs){
     <div style="margin-top:18px">
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin-bottom:8px">📋 Breakdown por Componente — ${C.met==='bruto'?'Bruto':C.met==='ctc'?'CTC':'Líquido'} Anual (CLT)</div>
       ${bkScens.map(({s,yrs})=>{
-        const cols = bkCols.map(({label,i})=>`<th style="text-align:right;padding:5px 10px;font-size:10px;color:var(--t2)">${label}</th>`).join('');
+        const sumAll = k => yrs.reduce((a,y)=>a+(y?.bk?.[k]||0),0);
+        const sumKey = k => yrs.reduce((a,y)=>a+(y?.[k]||0),0);
+        const thTot = `<th style="text-align:right;padding:5px 10px;font-size:10px;color:var(--o);border-left:1px solid var(--bd2)">Total ${C.hor}A</th>`;
+        const cols = bkCols.map(({label,i})=>`<th style="text-align:right;padding:5px 10px;font-size:10px;color:var(--t2)">${label}</th>`).join('')+thTot;
         if(C.met==='ctc'){
-          const ctcCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.ctc||0)}</td>`).join('');
+          const ctcCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.ctc||0)}</td>`).join('')
+            +`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o);border-left:1px solid var(--bd2)">${fK(sumKey('ctc'))}</td>`;
           return `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:10px">
             <div style="padding:8px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px">
               <span style="width:8px;height:8px;border-radius:50%;background:${s.color};flex-shrink:0"></span>
@@ -1992,7 +1996,7 @@ function viewProj(projs){
             <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">
               <thead><tr><th style="padding:5px 10px;font-size:10px;color:var(--t3);text-align:left">Componente</th>${cols}</tr></thead>
               <tbody>
-                <tr><td style="padding:5px 10px;font-size:11px;color:var(--t2)" colspan="${bkCols.length+1}"><span style="color:var(--t3);font-size:10px">CTC = salário bruto + encargos patronais (INSS 20%, RAT 2%, Sistema S 5,8%, FGTS 8%) + benefícios. RSU, bônus e PPR não compõem o custo direto da empresa.</span></td></tr>
+                <tr><td style="padding:5px 10px;font-size:11px;color:var(--t2)" colspan="${bkCols.length+2}"><span style="color:var(--t3);font-size:10px">CTC = salário bruto + encargos patronais (INSS 20%, RAT 2%, Sistema S 5,8%, FGTS 8%) + benefícios. RSU, bônus e PPR não compõem o custo direto da empresa.</span></td></tr>
                 <tr style="border-top:1px solid var(--bd2)">
                   <td style="padding:5px 10px;font-size:11px;font-weight:700;color:var(--t)">Total CTC</td>${ctcCells}
                 </tr>
@@ -2023,12 +2027,18 @@ function viewProj(projs){
         const totKey = isBruto?'bruto':'liq';
         const dataRows = comps.map(({k,lb})=>{
           const vals = bkCols.map(({i})=>yrs[i]?.bk?.[k]||0);
-          if(vals.every(v=>v===0)) return '';
+          const total = sumAll(k);
+          if(vals.every(v=>v===0)&&total===0) return '';
           const cells = vals.map(v=>`<td style="text-align:right;padding:5px 10px;font-size:11px;font-family:monospace;color:${v>0?'var(--t)':'var(--red)'}">${v>0?fK(v):v<0?'−'+fK(-v):'—'}</td>`).join('');
-          return `<tr><td style="padding:5px 10px;font-size:11px;color:var(--t2)">${lb}</td>${cells}</tr>`;
+          const totCell = `<td style="text-align:right;padding:5px 10px;font-size:11px;font-family:monospace;font-weight:700;color:${total>=0?'var(--o)':'var(--red)'};border-left:1px solid var(--bd2)">${total>0?fK(total):total<0?'−'+fK(-total):'—'}</td>`;
+          return `<tr><td style="padding:5px 10px;font-size:11px;color:var(--t2)">${lb}</td>${cells}${totCell}</tr>`;
         }).join('');
         const totLabel = isBruto?'Total Bruto':'Total Líquido';
-        const totCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.[totKey]||0)}</td>`).join('');
+        const totCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.[totKey]||0)}</td>`).join('')
+          +`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o);border-left:1px solid var(--bd2)">${fK(sumKey(totKey))}</td>`;
+        const fgtsTotal = sumAll('fgts');
+        const fgtsCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:10px;font-family:monospace;color:var(--t3)">${fK(yrs[i]?.bk?.fgts||0)}</td>`).join('')
+          +`<td style="text-align:right;padding:5px 10px;font-size:10px;font-family:monospace;color:var(--t3);border-left:1px solid var(--bd2)">${fK(fgtsTotal)}</td>`;
         return `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:10px">
           <div style="padding:8px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px">
             <span style="width:8px;height:8px;border-radius:50%;background:${s.color};flex-shrink:0"></span>
@@ -2043,7 +2053,7 @@ function viewProj(projs){
               </tr>
               <tr style="border-top:1px solid var(--bd)">
                 <td style="padding:5px 10px;font-size:10px;color:var(--t3)">🔒 FGTS depositado <span style="font-size:9px">(acesso restrito)</span></td>
-                ${bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:10px;font-family:monospace;color:var(--t3)">${fK(yrs[i]?.bk?.fgts||0)}</td>`).join('')}
+                ${fgtsCells}
               </tr>
             </tbody>
           </table></div>
