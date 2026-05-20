@@ -919,9 +919,9 @@ function projCLT(s,yr){
   const liq=liqMes+liq13+liqFer+liqPpr+liqBon+liqEq+liqEspp;
   const ctc=(sal+encargo(sal))*12+sal+bens;
   return{bruto,liq,trib:Math.max(0,bruto-liq),bens,ctc,bk:{
-    salLiq:liqMes, decLiq:liq13, ferLiq:liqFer,
-    pprLiq:liqPpr, bonLiq:liqBon, rsuLiq:liqEq, esppLiq:liqEspp, signinLiq:0,
-    salBruto:sal*12, pprBruto, bonBruto, rsuBruto:eqBruto, esppBruto,
+    salLiq:liqMes,  decLiq:liq13,  ferLiq:liqFer,
+    pprLiq:liqPpr,  bonLiq:liqBon, rsuLiq:liqEq, esppLiq:liqEspp, signinLiq:0,
+    salBruto:sal*12, decBruto:sal,  ferBruto, pprBruto, bonBruto, rsuBruto:eqBruto, esppBruto, signinBruto:0,
   }};
 }
 
@@ -1031,8 +1031,8 @@ function project(s,yr){
     const sb=parseFloat(s.signinBonus);
     const liqSb=sb-Math.max(0,calcIr(sb/2))*2;
     p={...p,bruto:p.bruto+sb,liq:p.liq+liqSb,trib:p.trib+(sb-liqSb)};
-    if(p.bk) p.bk.signinLiq=liqSb;
-    else p.bk={signinLiq:liqSb};
+    if(p.bk){ p.bk.signinLiq=liqSb; p.bk.signinBruto=sb; }
+    else p.bk={signinLiq:liqSb, signinBruto:sb};
   }
   return p;
 }
@@ -1368,7 +1368,7 @@ function formCLT(s){
               <span style="font-size:11px;color:var(--grn);font-family:monospace;font-weight:700">${fK(valAtual)}</span>
               <button onclick="delGrant(${id},${gi})" style="background:transparent;border:none;color:var(--t3);cursor:pointer;font-size:14px;padding:0">✕</button>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:end">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:end">
               <div>
                 <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Ano outorga</div>
                 <input type="text" inputmode="numeric" value="${grantYr}" onblur="updGrant(${id},${gi},'data',this.value+'-01');render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
@@ -1378,8 +1378,12 @@ function formCLT(s){
                 <input type="text" inputmode="numeric" value="${fmtField(gQtd)}" oninput="const v=maskNum(this);updGrant(${id},${gi},'qtd',v)" onblur="render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
               </div>
               <div>
-                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Preço outorga</div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Preço outorga (US$)</div>
                 <input type="text" inputmode="numeric" value="${fmtField(gPreco)}" oninput="const v=maskNum(this);updGrant(${id},${gi},'precoOutorga',v)" onblur="render()" style="width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">US$/R$ na outorga</div>
+                <input type="text" inputmode="numeric" value="${fmtField(parseFloat(g.cambioOutorga)||cambio)}" oninput="const v=maskNum(this);updGrant(${id},${gi},'cambioOutorga',v)" onblur="render()" style="width:100%;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;color:var(--t);padding:5px 7px;font-size:11px;font-family:monospace;outline:none">
               </div>
               <div>
                 <div style="font-size:9px;color:var(--t3);text-transform:uppercase;margin-bottom:2px">Vesting (anos)</div>
@@ -1428,19 +1432,23 @@ function formCLT(s){
         const weightedSum = grantsComPreco.reduce((a,g)=>a+parseFloat(g.qtd)*parseFloat(g.precoOutorga),0);
         const mediaOutorga = weightedSum/totalQtdP;
         const variacaoMedia = precoAtual>0&&mediaOutorga>0 ? (precoAtual-mediaOutorga)/mediaOutorga*100 : null;
-        const ganhoTotal = grantsComPreco.reduce((a,g)=>a+parseFloat(g.qtd)*(precoAtual-parseFloat(g.precoOutorga))*cambio,0);
+        const ganhoTotal = grantsComPreco.reduce((a,g)=>{
+          const camG=parseFloat(g.cambioOutorga)||cambio;
+          return a + parseFloat(g.qtd)*precoAtual*cambio - parseFloat(g.qtd)*parseFloat(g.precoOutorga)*camG;
+        },0);
 
         const rows = grantsComPreco.map((g,i)=>{
           const gQtd=parseFloat(g.qtd), gP=parseFloat(g.precoOutorga);
+          const camG=parseFloat(g.cambioOutorga)||cambio;
           const pct=precoAtual>0&&gP>0?(precoAtual-gP)/gP*100:null;
-          const ganho=gQtd*(precoAtual-gP)*cambio;
+          const ganho=gQtd*precoAtual*cambio - gQtd*gP*camG;
           const grantYrG=g.data?parseInt(String(g.data).slice(0,4)):hojeYr;
-          const cor=pct>=0?'var(--grn)':'var(--red)';
+          const cor=ganho>=0?'var(--grn)':'var(--red)';
           return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
             <span style="font-size:10px;color:var(--t2);min-width:80px;flex-shrink:0">Grant #${i+1} (${grantYrG})</span>
-            <span style="font-size:10px;color:var(--t3);flex:1">US$ ${gP.toFixed(2)} → US$ ${precoAtual.toFixed(2)}</span>
-            ${pct!==null?`<span style="font-size:10px;font-weight:700;color:${cor};white-space:nowrap">${pct>=0?'▲ +':'▼ '}${pct.toFixed(1)}%</span>`:''}
-            <span style="font-size:11px;font-weight:700;font-family:monospace;color:${ganho>=0?'var(--grn)':'var(--red)'};white-space:nowrap">${fK(ganho)}</span>
+            <span style="font-size:10px;color:var(--t3);flex:1">US$${gP.toFixed(2)}×R$${camG.toFixed(2)} → US$${precoAtual.toFixed(2)}×R$${cambio.toFixed(2)}</span>
+            ${pct!==null?`<span style="font-size:10px;font-weight:700;color:${pct>=0?'var(--grn)':'var(--red)'};white-space:nowrap">${pct>=0?'▲ +':'▼ '}${pct.toFixed(1)}%</span>`:''}
+            <span style="font-size:11px;font-weight:700;font-family:monospace;color:${cor};white-space:nowrap">${fK(ganho)}</span>
           </div>`;
         }).join('');
 
@@ -1778,7 +1786,7 @@ function addGrant(id){
   const s=S.scenarios.find(x=>x.id===id);if(!s)return;
   if(!Array.isArray(s.rsuGrants))s.rsuGrants=[];
   const hojeYr=new Date().getFullYear();
-  s.rsuGrants.push({data:`${hojeYr}-01`,qtd:0,precoOutorga:0,vest:s.rsuVestPadrao||3,cliff:s.rsuCliffPadrao||1});
+  s.rsuGrants.push({data:`${hojeYr}-01`,qtd:0,precoOutorga:0,cambioOutorga:parseFloat(s.rsuCambio)||5.8,vest:s.rsuVestPadrao||3,cliff:s.rsuCliffPadrao||1});
   save();render();
 }
 function delGrant(id,gi){
@@ -1972,10 +1980,20 @@ function viewProj(projs){
   const bkScens = projs.filter(({s,yrs})=>s.type==='CLT'&&yrs[0]?.bk);
   const bkPanel = bkScens.length ? `
     <div style="margin-top:18px">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin-bottom:8px">📋 Breakdown por Componente — Líquido Anual (CLT)</div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t2);margin-bottom:8px">📋 Breakdown por Componente — ${C.met==='bruto'?'Bruto':C.met==='ctc'?'CTC':'Líquido'} Anual (CLT)</div>
       ${bkScens.map(({s,yrs})=>{
         const cols = bkCols.map(({label,i})=>`<th style="text-align:right;padding:5px 10px;font-size:10px;color:var(--t2)">${label}</th>`).join('');
-        const comps = [
+        const isBruto = C.met==='bruto';
+        const comps = isBruto ? [
+          {k:'salBruto',   lb:'Salário (12 meses)'},
+          {k:'decBruto',   lb:'13º Salário'},
+          {k:'ferBruto',   lb:'Férias + 1/3'},
+          {k:'pprBruto',   lb:'PPR / PLR'},
+          {k:'bonBruto',   lb:'Bônus Anual'},
+          {k:'signinBruto',lb:'Signin Bonus'},
+          {k:'rsuBruto',   lb:'RSU / Equity'},
+          {k:'esppBruto',  lb:'ESPP / VAPE'},
+        ] : [
           {k:'salLiq',   lb:'Salário (12 meses)'},
           {k:'decLiq',   lb:'13º Salário'},
           {k:'ferLiq',   lb:'Férias + 1/3'},
@@ -1985,13 +2003,15 @@ function viewProj(projs){
           {k:'rsuLiq',   lb:'RSU / Equity'},
           {k:'esppLiq',  lb:'ESPP / VAPE'},
         ];
+        const totKey = C.met==='bruto'?'bruto':C.met==='ctc'?'ctc':'liq';
         const dataRows = comps.map(({k,lb})=>{
           const vals = bkCols.map(({i})=>yrs[i]?.bk?.[k]||0);
           if(vals.every(v=>v===0)) return '';
           const cells = vals.map(v=>`<td style="text-align:right;padding:5px 10px;font-size:11px;font-family:monospace;color:${v>0?'var(--t)':'var(--red)'}">${v>0?fK(v):v<0?'−'+fK(-v):'—'}</td>`).join('');
           return `<tr><td style="padding:5px 10px;font-size:11px;color:var(--t2)">${lb}</td>${cells}</tr>`;
         }).join('');
-        const totCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.liq||0)}</td>`).join('');
+        const totLabel = C.met==='bruto'?'Total Bruto':C.met==='ctc'?'Total CTC':'Total Líquido';
+        const totCells = bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:12px;font-weight:800;font-family:monospace;color:var(--o)">${fK(yrs[i]?.[totKey]||0)}</td>`).join('');
         return `<div style="background:var(--s2);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:10px">
           <div style="padding:8px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px">
             <span style="width:8px;height:8px;border-radius:50%;background:${s.color};flex-shrink:0"></span>
@@ -2002,7 +2022,7 @@ function viewProj(projs){
             <tbody>
               ${dataRows}
               <tr style="border-top:1px solid var(--bd2)">
-                <td style="padding:5px 10px;font-size:11px;font-weight:700;color:var(--t)">Total Líquido</td>${totCells}
+                <td style="padding:5px 10px;font-size:11px;font-weight:700;color:var(--t)">${totLabel}</td>${totCells}
               </tr>
             </tbody>
           </table></div>
