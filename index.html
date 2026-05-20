@@ -920,6 +920,7 @@ function projCLT(s,yr){
     salLiq:liqMes,  decLiq:liq13,  ferLiq:liqFer,
     pprLiq:liqPpr,  bonLiq:liqBon, rsuLiq:liqEq, esppLiq:liqEspp, signinLiq:0,
     salBruto:sal*12, decBruto:sal,  ferBruto, pprBruto, bonBruto, rsuBruto:eqBruto, esppBruto, signinBruto:0,
+    fgts: sal*12*0.08,
   }};
 }
 
@@ -2039,6 +2040,10 @@ function viewProj(projs){
               ${dataRows}
               <tr style="border-top:1px solid var(--bd2)">
                 <td style="padding:5px 10px;font-size:11px;font-weight:700;color:var(--t)">${totLabel}</td>${totCells}
+              </tr>
+              <tr style="border-top:1px solid var(--bd)">
+                <td style="padding:5px 10px;font-size:10px;color:var(--t3)">🔒 FGTS depositado <span style="font-size:9px">(acesso restrito)</span></td>
+                ${bkCols.map(({i})=>`<td style="text-align:right;padding:5px 10px;font-size:10px;font-family:monospace;color:var(--t3)">${fK(yrs[i]?.bk?.fgts||0)}</td>`).join('')}
               </tr>
             </tbody>
           </table></div>
