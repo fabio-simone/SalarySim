@@ -819,8 +819,8 @@ function projCLT(s,yr){
     eqBruto += valorBRL;
   });
 
-  // Grants recorrentes futuros: a empresa concede um novo grant a cada ciclo de vesting
-  // Estimamos com base no último grant histórico (média de qtd)
+  // Grants recorrentes futuros pré-MD: só até o ano de promoção a MD
+  const limitePreMD = mdAno > 0 ? hojeYr + mdAno - 1 : Infinity;
   if(s.rsuRecorrente !== false && grants.length > 0){
     const ultGrant = grants[grants.length-1];
     const qtdUlt = parseFloat(ultGrant.qtd)||0;
@@ -828,9 +828,9 @@ function projCLT(s,yr){
     const cliffUlt = parseInt(ultGrant.cliff)||s.rsuCliffPadrao||1;
     const ultGrantYr = ultGrant.data ? parseInt(String(ultGrant.data).slice(0,4)) : hojeYr;
 
-    // Próximos grants futuros após o último histórico
     for(let nxt=1; nxt<10; nxt++){
       const futGrantYr = ultGrantYr + nxt*vestUlt;
+      if(futGrantYr > limitePreMD) break; // para na promoção MD (inclusive)
       const yrAbs = hojeYr + yr - 1;
       const anosDesdeGrant = yrAbs - futGrantYr;
       if(anosDesdeGrant < cliffUlt) continue;
@@ -839,6 +839,30 @@ function projCLT(s,yr){
       let qtdVest;
       if(anosDesdeGrant === cliffUlt) qtdVest = qtdUlt * (cliffUlt/vestUlt);
       else qtdVest = qtdUlt * (1/vestUlt);
+      const precoNoVest = precoAtual * Math.pow(1+(crescPreco/100), Math.max(0, yrAbs-hojeYr));
+      const cambioNoVest = cambioBase * Math.pow(1+(crescCambio/100), Math.max(0, yrAbs-hojeYr));
+      const ajuste = 1 + (rateCenario - crescPreco/100) * Math.max(0, yrAbs-hojeYr);
+      eqBruto += qtdVest * precoNoVest * cambioNoVest * Math.max(0.1, ajuste);
+    }
+  }
+
+  // Grants recorrentes pós-MD
+  if(mdAno > 0 && s.mdRsuRecorrente === true && (parseFloat(s.mdRsuQtd)||0) > 0){
+    const qtdMD   = parseFloat(s.mdRsuQtd);
+    const vestMD  = parseInt(s.rsuVestPadrao)||3;
+    const cliffMD = parseInt(s.rsuCliffPadrao)||1;
+    const anoIni  = hojeYr + (parseInt(s.mdRsuAnoInicio)||mdAno) - 1;
+    for(let nxt=0; nxt<10; nxt++){
+      const futGrantYr = anoIni + nxt*vestMD;
+      const yrAbs = hojeYr + yr - 1;
+      const anosDesdeGrant = yrAbs - futGrantYr;
+      if(futGrantYr <= limitePreMD) continue; // não sobrepõe pré-MD
+      if(anosDesdeGrant < cliffMD) continue;
+      if(anosDesdeGrant > vestMD) continue;
+      if(futGrantYr > yrAbs) break;
+      let qtdVest;
+      if(anosDesdeGrant === cliffMD) qtdVest = qtdMD * (cliffMD/vestMD);
+      else qtdVest = qtdMD * (1/vestMD);
       const precoNoVest = precoAtual * Math.pow(1+(crescPreco/100), Math.max(0, yrAbs-hojeYr));
       const cambioNoVest = cambioBase * Math.pow(1+(crescCambio/100), Math.max(0, yrAbs-hojeYr));
       const ajuste = 1 + (rateCenario - crescPreco/100) * Math.max(0, yrAbs-hojeYr);
@@ -1475,12 +1499,24 @@ function formCLT(s){
         </div>`;
       })()}</div>`:''}
 
-      ${fld('Grants futuros recorrentes','',
-        'Ativo: assume que a empresa concede novos grants no futuro (Accenture concede anualmente). Usa a quantidade do último grant histórico como referência.',
+      ${fld('Grants recorrentes pré-MD','',
+        (mdAno>0?`Grants futuros até o Ano ${mdAno-1} (antes da promoção MD). `:'')+'Usa a quantidade do último grant histórico como referência.',
         `<div class="tog-row">
-          <button class="tog${s.rsuRecorrente!==false?' on':''}" onclick="updStr(${id},'rsuRecorrente',true);render()">Sim — novos grants no futuro</button>
-          <button class="tog${s.rsuRecorrente===false?' on':''}" onclick="updStr(${id},'rsuRecorrente',false);render()">Não — só os grants listados</button>
+          <button class="tog${s.rsuRecorrente!==false?' on':''}" onclick="updStr(${id},'rsuRecorrente',true);render()">Sim</button>
+          <button class="tog${s.rsuRecorrente===false?' on':''}" onclick="updStr(${id},'rsuRecorrente',false);render()">Não</button>
         </div>`,true)}
+      ${mdAno>0?fld('Grants recorrentes pós-MD','',
+        'Após a promoção a MD, a Accenture continua concedendo grants anuais. Ative para modelar.',
+        `<div class="tog-row">
+          <button class="tog${s.mdRsuRecorrente===true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',true);render()">Sim</button>
+          <button class="tog${s.mdRsuRecorrente!==true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',false);render()">Não</button>
+        </div>`,true):''
+      }
+      ${mdAno>0&&s.mdRsuRecorrente===true?`
+        ${fld('Qtd de ações por grant MD','ações por ciclo','Quantidade de ações concedidas em cada novo grant após a promoção a MD.',ni(id,'mdRsuQtd','','ações',100,0,s.mdRsuQtd||0))}
+        ${fld('A partir do ano','ano da projeção',`Grants pós-MD começam neste ano. Padrão: Ano ${mdAno} (ano da promoção).`,ni(id,'mdRsuAnoInicio','Ano','',1,1,s.mdRsuAnoInicio||mdAno))}
+      `:''}
+
 
       <div class="fc2"><div class="fld-ctx" style="margin-top:8px">
         <strong>Valorização da ação:</strong> use Pessimista / Base / Otimista no topo. Os valores abaixo são as taxas anuais para cada cenário.
