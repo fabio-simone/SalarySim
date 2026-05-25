@@ -1499,23 +1499,23 @@ function formCLT(s){
         </div>`;
       })()}</div>`:''}
 
-      ${fld('Grants recorrentes pré-MD','',
-        (mdAno>0?`Grants futuros até o Ano ${mdAno-1} (antes da promoção MD). `:'')+'Usa a quantidade do último grant histórico como referência.',
+      ${(()=>{ const mA=parseInt(s.mdAno)||0; return fld('Grants recorrentes pré-MD','',
+        (mA>0?`Grants futuros até o Ano ${mA-1} (antes da promoção MD). `:'')+'Usa a quantidade do último grant histórico como referência.',
         `<div class="tog-row">
           <button class="tog${s.rsuRecorrente!==false?' on':''}" onclick="updStr(${id},'rsuRecorrente',true);render()">Sim</button>
           <button class="tog${s.rsuRecorrente===false?' on':''}" onclick="updStr(${id},'rsuRecorrente',false);render()">Não</button>
-        </div>`,true)}
-      ${mdAno>0?fld('Grants recorrentes pós-MD','',
-        'Após a promoção a MD, a Accenture continua concedendo grants anuais. Ative para modelar.',
-        `<div class="tog-row">
-          <button class="tog${s.mdRsuRecorrente===true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',true);render()">Sim</button>
-          <button class="tog${s.mdRsuRecorrente!==true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',false);render()">Não</button>
-        </div>`,true):''
-      }
-      ${mdAno>0&&s.mdRsuRecorrente===true?`
-        ${fld('Qtd de ações por grant MD','ações por ciclo','Quantidade de ações concedidas em cada novo grant após a promoção a MD.',ni(id,'mdRsuQtd','','ações',100,0,s.mdRsuQtd||0))}
-        ${fld('A partir do ano','ano da projeção',`Grants pós-MD começam neste ano. Padrão: Ano ${mdAno} (ano da promoção).`,ni(id,'mdRsuAnoInicio','Ano','',1,1,s.mdRsuAnoInicio||mdAno))}
-      `:''}
+        </div>`,true)
+        +(mA>0?fld('Grants recorrentes pós-MD','',
+          'Após a promoção a MD, a Accenture continua concedendo grants anuais. Ative para modelar.',
+          `<div class="tog-row">
+            <button class="tog${s.mdRsuRecorrente===true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',true);render()">Sim</button>
+            <button class="tog${s.mdRsuRecorrente!==true?' on':''}" onclick="updStr(${id},'mdRsuRecorrente',false);render()">Não</button>
+          </div>`,true):'')
+        +(mA>0&&s.mdRsuRecorrente===true?
+          fld('Qtd de ações por grant MD','ações por ciclo','Quantidade de ações concedidas em cada novo grant após a promoção a MD.',ni(id,'mdRsuQtd','','ações',100,0,s.mdRsuQtd||0))+
+          fld('A partir do ano','ano da projeção',`Grants pós-MD começam neste ano. Padrão: Ano ${mA} (ano da promoção).`,ni(id,'mdRsuAnoInicio','Ano','',1,1,s.mdRsuAnoInicio||mA))
+        :'');
+      })()}
 
 
       <div class="fc2"><div class="fld-ctx" style="margin-top:8px">
